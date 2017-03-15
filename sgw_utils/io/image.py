@@ -12,6 +12,7 @@ from sgw_utils.features import gabor, fisher
 
 def convert_to_onehot(labels):
     """Convert label array to one-hot vector by Keras function 'to_categorical'. 
+
     :param labels: Numpy integer array representing label indices. 
     """
     nb_classes = labels.max()
@@ -19,6 +20,7 @@ def convert_to_onehot(labels):
 
 def get_crop_locs(shape, patch_size=32):
     """Get locations where patches are cropped in a source image. 
+
     :param shape: Shape of source image you suppose. 
     :param patch_size: The edge length of cropped patches. 
     """
@@ -30,6 +32,7 @@ def get_crop_locs(shape, patch_size=32):
 
 def get_crop_masks(shape, patch_size=32):
     """Get masks for cropping regions in a source image. 
+
     :param shape: Shape of source image you suppose. 
     :param patch_size: The edge length of cropped patches. 
     """

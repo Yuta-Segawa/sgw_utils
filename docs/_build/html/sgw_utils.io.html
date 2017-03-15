@@ -167,8 +167,71 @@
 <dd></dd></dl>
 
 </div>
-<div class="section" id="sgw-utils-io-image-module">
-<h2>sgw_utils.io.image module<a class="headerlink" href="#sgw-utils-io-image-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-sgw_utils.io.image">
+<span id="sgw-utils-io-image-module"></span><h2>sgw_utils.io.image module<a class="headerlink" href="#module-sgw_utils.io.image" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.io.image.convert_to_onehot">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">convert_to_onehot</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#convert_to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.convert_to_onehot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert label array to one-hot vector by Keras function &#8216;to_categorical&#8217;. 
+:param labels: Numpy integer array representing label indices.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.crop_imgs">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">crop_imgs</code><span class="sig-paren">(</span><em>img</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#crop_imgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.crop_imgs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.feature_select_switcher">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">feature_select_switcher</code><span class="sig-paren">(</span><em>feature_keyword</em>, <em>image_dir=None</em>, <em>output_dir='./'</em>, <em>identifier=None</em>, <em>extension='jpg'</em>, <em>max_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#feature_select_switcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.feature_select_switcher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.get_crop_locs">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">get_crop_locs</code><span class="sig-paren">(</span><em>shape</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#get_crop_locs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.get_crop_locs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get locations where patches are cropped in a source image. 
+:param shape: Shape of source image you suppose. 
+:param patch_size: The edge length of cropped patches.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.get_crop_masks">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">get_crop_masks</code><span class="sig-paren">(</span><em>shape</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#get_crop_masks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.get_crop_masks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get masks for cropping regions in a source image. 
+:param shape: Shape of source image you suppose. 
+:param patch_size: The edge length of cropped patches.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.load_images_from_dirs">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">load_images_from_dirs</code><span class="sig-paren">(</span><em>basedir</em>, <em>classnames</em>, <em>image_shape=(299</em>, <em>299)</em>, <em>extension='*'</em>, <em>max_smps=-1</em>, <em>mp_nums=1</em>, <em>vervosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#load_images_from_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.load_images_from_dirs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.load_images_in_dir">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">load_images_in_dir</code><span class="sig-paren">(</span><em>dirname</em>, <em>image_shape=(299</em>, <em>299)</em>, <em>extension='*'</em>, <em>max_smps=-1</em>, <em>mp_nums=1</em>, <em>vervosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#load_images_in_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.load_images_in_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.mp_func">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">mp_func</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#mp_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.mp_func" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.preprocess_on_images">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">preprocess_on_images</code><span class="sig-paren">(</span><em>images</em>, <em>type='inception'</em>, <em>vervosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#preprocess_on_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.preprocess_on_images" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.resize_and_transpose">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">resize_and_transpose</code><span class="sig-paren">(</span><em>img_fn</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#resize_and_transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.resize_and_transpose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.split_into_batches">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">split_into_batches</code><span class="sig-paren">(</span><em>data</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#split_into_batches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.split_into_batches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-sgw_utils.io">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sgw_utils.io" title="Permalink to this headline">¶</a></h2>
@@ -188,7 +251,7 @@
 <li><a class="reference internal" href="#module-sgw_utils.io.directory">sgw_utils.io.directory module</a></li>
 <li><a class="reference internal" href="#module-sgw_utils.io.formatting">sgw_utils.io.formatting module</a></li>
 <li><a class="reference internal" href="#module-sgw_utils.io.generator">sgw_utils.io.generator module</a></li>
-<li><a class="reference internal" href="#sgw-utils-io-image-module">sgw_utils.io.image module</a></li>
+<li><a class="reference internal" href="#module-sgw_utils.io.image">sgw_utils.io.image module</a></li>
 <li><a class="reference internal" href="#module-sgw_utils.io">Module contents</a></li>
 </ul>
 </li>
