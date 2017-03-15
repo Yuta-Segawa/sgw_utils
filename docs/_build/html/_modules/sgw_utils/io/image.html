@@ -62,6 +62,7 @@
 
 <div class="viewcode-block" id="convert_to_onehot"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.convert_to_onehot">[docs]</a><span class="k">def</span> <span class="nf">convert_to_onehot</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert label array to one-hot vector by Keras function &#39;to_categorical&#39;. </span>
+
 <span class="sd">    :param labels: Numpy integer array representing label indices. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nb_classes</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -69,6 +70,7 @@
 
 <div class="viewcode-block" id="get_crop_locs"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.get_crop_locs">[docs]</a><span class="k">def</span> <span class="nf">get_crop_locs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get locations where patches are cropped in a source image. </span>
+
 <span class="sd">    :param shape: Shape of source image you suppose. </span>
 <span class="sd">    :param patch_size: The edge length of cropped patches. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -80,6 +82,7 @@
 
 <div class="viewcode-block" id="get_crop_masks"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.get_crop_masks">[docs]</a><span class="k">def</span> <span class="nf">get_crop_masks</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get masks for cropping regions in a source image. </span>
+
 <span class="sd">    :param shape: Shape of source image you suppose. </span>
 <span class="sd">    :param patch_size: The edge length of cropped patches. </span>
 <span class="sd">    &quot;&quot;&quot;</span>

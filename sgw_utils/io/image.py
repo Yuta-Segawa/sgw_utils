@@ -14,6 +14,7 @@ def convert_to_onehot(labels):
     """Convert label array to one-hot vector by Keras function 'to_categorical'. 
 
     :param labels: Numpy integer array representing label indices. 
+    :return: One-hot labels. 
     """
     nb_classes = labels.max()
     return to_categorical(lables, nb_classes)
@@ -23,6 +24,7 @@ def get_crop_locs(shape, patch_size=32):
 
     :param shape: Shape of source image you suppose. 
     :param patch_size: The edge length of cropped patches. 
+    :return: Cropping location as list of ((tl_y tl_x), (br_y, br_x)). 
     """
     tl_x_locs = np.arange(0, shape[1], patch_size)
     tl_y_locs = np.arange(0, shape[0], patch_size)
@@ -35,6 +37,7 @@ def get_crop_masks(shape, patch_size=32):
 
     :param shape: Shape of source image you suppose. 
     :param patch_size: The edge length of cropped patches. 
+    :return: List of the masks of numpy array. 
     """
     locs = get_crop_locs(shape, patch_size)
     loc_masks = []
@@ -45,6 +48,12 @@ def get_crop_masks(shape, patch_size=32):
     return loc_masks
 
 def crop_imgs(img, patch_size=32):
+    """Crop patches from the source image along the scan lines. 
+    
+    :param img: Source image. 
+    :param patch_size: The edge length of cropped patches. 
+    :return: List of cropped patches. 
+    """
     locs = get_crop_locs(shape, patch_size)
     mirrored_img = np.hstack([np.vstack([img, img[::-1]]), np.vstack([img[::, ::-1], img[::-1, ::-1]])])
     return [mirrored_img[tl[0]:br[0], tl[1]:br[1]] for tl, br in locs]
@@ -56,9 +65,18 @@ def mp_func(args):
 
 # for training adn evaluation
 def load_images_from_dirs(basedir, classnames, 
-    image_shape=(299, 299), extension="*", max_smps=-1, mp_nums=1, vervosity=1):
-    # only_labels: A flag to avoid to resizing images by reading only labels
-    # max_smps: Number of images per a class which should be loaded. -1 means load maximum number as possible
+    image_shape=(299, 299), extension="*", max_smps=-1, max_threads=1, vervosity=1):
+    """Load images from sub-directories and pre-resize them. 
+
+    :param basedir: Base directory containing sub-directories including images to be loaded. 
+    :param classnames: List of the sub-directories' naems arranged in order of class labels.  
+    :param image_shape: Shape of loaded images for resizing. 
+    :param extension: Suffix of images to be loaded. 
+    :param max_smps: Limitation of images to be loaded. Default of '-1' means the entire images will be loaded.  
+    :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
+    :pamar bool vervosity: Vervosity on displaying status. 
+    :return: Loaded and resized images as list of numpy array in shape of (samples_num, image_shape[0], image_shape[1]). 
+    """
 
     # get filenames from directories of the classes
     dirnames = [ os.path.join(basedir, cls) for cls in classnames 
@@ -76,7 +94,7 @@ def load_images_from_dirs(basedir, classnames,
             max_smps = min(len(fns), max_smps) 
 
     # load all images
-    mp_status = 'enabled with %d threads' % mp_nums if not mp_nums == 1 else 'disable'
+    mp_status = 'enabled with %d threads' % max_threads if not max_threads == 1 else 'disable'
     if vervosity:
         print("[I]Resize with shape %s" % str(image_shape))
         print("[I]( Multi-Processing: %s)" % mp_status)
@@ -91,8 +109,8 @@ def load_images_from_dirs(basedir, classnames,
         if vervosity: 
             print("[I]Resizing %d images belonging to the class %d. " % (len(cls_img_fns), i))
 
-        if mp_nums > 1:
-            p = Pool(mp_nums)
+        if max_threads > 1:
+            p = Pool(max_threads)
             loaded_imgs.append(np.array(p.map(mp_func, zip(cls_img_fns, [image_shape]*len(cls_img_fns))), float))
             p.close()
         else:
@@ -112,9 +130,17 @@ def load_images_from_dirs(basedir, classnames,
 
 # for prediction
 def load_images_in_dir(dirname, 
-    image_shape=(299, 299), extension="*", max_smps=-1, mp_nums=1, vervosity=1):
-    # only_labels: A flag to avoid to resizing images by reading only labels
-    # max_smps: Number of images per a class which should be loaded. -1 means load maximum number as possible
+    image_shape=(299, 299), extension="*", max_smps=-1, max_threads=1, vervosity=1):
+    """Load images from a single directory and pre-resize them. 
+
+    :param dirname: Directory including images to be loaded. 
+    :param image_shape: Shape of loaded images for resizing. 
+    :param extension: Suffix of images to be loaded. 
+    :param max_smps: Limitation of images to be loaded. Default of '-1' means the entire images will be loaded.  
+    :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
+    :pamar bool vervosity: Vervosity on displaying status. 
+    :return: Loaded and resized images as numpy array in shape of (classes_num, samples_num, image_shape[0], image_shape[1]). 
+    """
 
     # get filenames from directories of the classes
     img_filenames = sorted(glob.glob(os.path.join(dirname, "*.%s" % extension)))
@@ -139,13 +165,13 @@ def load_images_in_dir(dirname,
             print("[I]Not any resizing. ")
         else: 
             print("[I]Resizing with shape %s..." % str(image_shape))
-    mp_status = 'enabled with %d threads' % mp_nums if not mp_nums == 1 else 'disable'
+    mp_status = 'enabled with %d threads' % max_threads if not max_threads == 1 else 'disable'
     if vervosity:
         print("[I]( Multi-Processing: %s)" % mp_status)
 
 
-    if mp_nums > 1:
-        p = Pool(mp_nums)
+    if max_threads > 1:
+        p = Pool(max_threads)
         loaded_imgs = np.array(p.map(mp_func, zip(img_filenames, [image_shape]*len(img_filenames)))).astype(float)
         p.close()
     else:
@@ -154,6 +180,16 @@ def load_images_in_dir(dirname,
     return loaded_imgs
 
 def preprocess_on_images(images, type='inception', vervosity=1):
+    """Preprocess on the images by several types of method. 
+
+    :param images: Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input. 
+    :param type: Preprocessing type. You can choose from 'inception', 'vgg', and 'disable': 
+        - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
+        - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
+        - disable: Not apply any methods of preprocessing. 
+    :pamar bool vervosity: Vervosity on displaying status. 
+    :return: Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]). 
+    """
 
     # determinant preprocessing
     if vervosity:
@@ -173,6 +209,12 @@ def preprocess_on_images(images, type='inception', vervosity=1):
     return images
 
 def split_into_batches(data, batch_size=100):
+    """Split input data into some batches. 
+
+    :param data: Target data in numpy array. 
+    :batch_size: Size of batches. This works based on numpy function 'array_split'. 
+    :return: List of Batches. 
+    """
     if len(data) <= batch_size:
         return data
     else:
@@ -180,11 +222,20 @@ def split_into_batches(data, batch_size=100):
 
 def feature_select_switcher(feature_keyword, 
     image_dir=None, output_dir="./", identifier=None, extension="jpg", max_threads=1):
-    # Play a role as a helper to determine which feature to be returned. 
-    # 1) If a path to a file of features is given, this will return loaded numpy array. 
-    # 2) If a type of feature and image_dir are given, this will return calculated features with the type. 
-    # 2-1) Now 'gabor' and 'fisher' are available as a feature type. 
-    # 3) If an unrecognized string or None is given, this will return None. 
+    """Helper to easily determine which feature to be returned. 
+    
+    :param feature_keyword: Keyword for feature data which will be returned finally: 
+        1. If a path to a file of features is given, this will return loaded numpy array. 
+        2. If a type of feature and image_dir are given, this will return calculated features with the type. 
+            - Now 'gabor' and 'fisher' are available as a feature type. 
+        3. If an unrecognized string or None is given, this will return None. 
+    :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. 
+    :param output_dir: Output directory for calculated feature file. This will be also ignored when feature file is already existing. 
+    :param identifier: Identifier of file name of features. This will be used as like "<identifier>_<feature_keyword>_features.npy"
+    :param extension: Suffix of images to be loaded. 
+    :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
+    :return: Calculated or loaded features as numpy array. 
+    """
 
     return_features = None
  

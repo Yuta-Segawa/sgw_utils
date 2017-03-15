@@ -172,8 +172,15 @@
 <dl class="function">
 <dt id="sgw_utils.io.image.convert_to_onehot">
 <code class="descclassname">sgw_utils.io.image.</code><code class="descname">convert_to_onehot</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#convert_to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.convert_to_onehot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert label array to one-hot vector by Keras function &#8216;to_categorical&#8217;. 
-:param labels: Numpy integer array representing label indices.</p>
+<dd><p>Convert label array to one-hot vector by Keras function &#8216;to_categorical&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>labels</strong> &#8211; Numpy integer array representing label indices.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -189,17 +196,37 @@
 <dl class="function">
 <dt id="sgw_utils.io.image.get_crop_locs">
 <code class="descclassname">sgw_utils.io.image.</code><code class="descname">get_crop_locs</code><span class="sig-paren">(</span><em>shape</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#get_crop_locs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.get_crop_locs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get locations where patches are cropped in a source image. 
-:param shape: Shape of source image you suppose. 
-:param patch_size: The edge length of cropped patches.</p>
+<dd><p>Get locations where patches are cropped in a source image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shape</strong> &#8211; Shape of source image you suppose.</li>
+<li><strong>patch_size</strong> &#8211; The edge length of cropped patches.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="sgw_utils.io.image.get_crop_masks">
 <code class="descclassname">sgw_utils.io.image.</code><code class="descname">get_crop_masks</code><span class="sig-paren">(</span><em>shape</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#get_crop_masks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.get_crop_masks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get masks for cropping regions in a source image. 
-:param shape: Shape of source image you suppose. 
-:param patch_size: The edge length of cropped patches.</p>
+<dd><p>Get masks for cropping regions in a source image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shape</strong> &#8211; Shape of source image you suppose.</li>
+<li><strong>patch_size</strong> &#8211; The edge length of cropped patches.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
