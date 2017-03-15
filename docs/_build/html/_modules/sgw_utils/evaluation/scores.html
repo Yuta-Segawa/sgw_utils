@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sgw_utils.evaluation.scores &#8212; sgw_utils  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for sgw_utils.evaluation.scores</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
+
+<div class="viewcode-block" id="calculate_scores"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.calculate_scores">[docs]</a><span class="k">def</span> <span class="nf">calculate_scores</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">true_positives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cm</span><span class="p">))</span>
+    <span class="n">false_positives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">true_positives</span><span class="p">)</span>
+    <span class="n">false_negatives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">true_positives</span><span class="p">)</span>
+
+    <span class="n">Precision</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Recall</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">F_measure</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">prec</span> <span class="o">=</span> <span class="n">true_positives</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">true_positives</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">+</span> <span class="n">false_positives</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">true_positives</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">true_positives</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">+</span> <span class="n">false_negatives</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
+        <span class="n">f_m</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">prec</span> <span class="o">*</span> <span class="n">rec</span> <span class="o">/</span> <span class="p">(</span><span class="n">prec</span> <span class="o">+</span> <span class="n">rec</span><span class="p">)</span>
+        <span class="n">Precision</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prec</span><span class="p">)</span>
+        <span class="n">Recall</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+        <span class="n">F_measure</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_m</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Class </span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">: </span><span class="si">{1:.3f}</span><span class="s1">&#39;</span>
+            <span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Precision&quot;</span><span class="p">,</span> <span class="n">prec</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Recall&quot;</span><span class="p">,</span> <span class="n">rec</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;F-measure&quot;</span><span class="p">,</span> <span class="n">f_m</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Precision</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Recall</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_measure</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="macro_micro_scores"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.macro_micro_scores">[docs]</a><span class="k">def</span> <span class="nf">macro_micro_scores</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">show_only_num</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># input arguments: </span>
+    <span class="c1">## dirpath: Path to directory including cm, prec, rec, f_m.npy files for entire videos. </span>
+
+    <span class="n">precision_label</span> <span class="o">=</span> <span class="s2">&quot;Precision</span><span class="se">\t</span><span class="s2">&quot;</span>
+    <span class="n">recall_label</span> <span class="o">=</span> <span class="s2">&quot;Recall</span><span class="se">\t</span><span class="s2">&quot;</span>
+    <span class="n">f_measure_label</span> <span class="o">=</span> <span class="s2">&quot;F_measure</span><span class="se">\t</span><span class="s2">&quot;</span>
+    <span class="n">accuracy_label</span> <span class="o">=</span> <span class="s2">&quot;Accuracy</span><span class="se">\t</span><span class="s2">&quot;</span>
+
+    <span class="k">if</span> <span class="n">show_only_num</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">precision_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">recall_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">f_measure_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">accuracy_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">cms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;*_cm.npy&quot;</span><span class="p">)))])</span>
+    <span class="n">precs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;*_prec.npy&quot;</span><span class="p">)))])</span>
+    <span class="n">recs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;*_rec.npy&quot;</span><span class="p">)))])</span>
+    <span class="n">f_ms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;*_f_m.npy&quot;</span><span class="p">)))])</span>
+
+    <span class="c1"># exception numbers (NaN) are assigned to zero</span>
+    <span class="n">precs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">precs</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">recs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">recs</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">f_ms</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">f_ms</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="nb">print</span> <span class="s2">&quot;dipath: &quot;</span><span class="p">,</span> <span class="n">dirpath</span>
+    <span class="nb">print</span> <span class="s2">&quot;total cm: &quot;</span>
+    <span class="nb">print</span> <span class="n">cms</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">show_only_num</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;macro averaged scores in videowise: &quot;</span>
+    <span class="n">macro_precs</span> <span class="o">=</span> <span class="n">precs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+    <span class="n">macro_recs</span> <span class="o">=</span> <span class="n">recs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+    <span class="n">macro_f_ms</span> <span class="o">=</span> <span class="n">f_ms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+    <span class="n">macro_precs_str</span> <span class="o">=</span> <span class="n">precision_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">macro_precs</span><span class="p">])</span>
+    <span class="n">macro_recs_str</span> <span class="o">=</span> <span class="n">recall_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">macro_recs</span><span class="p">])</span>
+    <span class="n">macro_f_ms_str</span> <span class="o">=</span> <span class="n">f_measure_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">macro_f_ms</span><span class="p">])</span>
+
+    <span class="nb">print</span> <span class="n">macro_precs_str</span>
+    <span class="nb">print</span> <span class="n">macro_recs_str</span>
+    <span class="nb">print</span> <span class="n">macro_f_ms_str</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">show_only_num</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;macro averaged scores in video-classwise: &quot;</span>
+    <span class="n">classwise_macro_prec</span> <span class="o">=</span> <span class="n">macro_precs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">classwise_macro_rec</span> <span class="o">=</span> <span class="n">macro_recs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">classwise_macro_f_m</span> <span class="o">=</span> <span class="n">macro_f_ms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="k">for</span> <span class="n">cm</span> <span class="ow">in</span> <span class="n">cms</span><span class="p">])</span> <span class="o">*</span> <span class="mf">100.0</span>
+
+    <span class="nb">print</span> <span class="n">precision_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">classwise_macro_prec</span>
+    <span class="nb">print</span> <span class="n">recall_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">classwise_macro_rec</span>
+    <span class="nb">print</span> <span class="n">f_measure_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">classwise_macro_f_m</span>
+    <span class="nb">print</span> <span class="n">accuracy_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">accuracy</span></div>
+
+    <span class="c1"># if not show_only_num:</span>
+    <span class="c1">#     print &quot;micro averaged scores in videowise: &quot;</span>
+    <span class="c1"># micro_precs, micro_recs, micro_f_ms = calculate_scores(cms.sum(axis=0), show_result=False)</span>
+    <span class="c1"># micro_precs = micro_precs * 100.0</span>
+    <span class="c1"># micro_recs = micro_recs * 100.0</span>
+    <span class="c1"># micro_f_ms = micro_f_ms * 100.0</span>
+    <span class="c1"># micro_precs_str = precision_label + &quot;\t&quot;.join([&quot;%.1f&quot;%val for val in micro_precs])</span>
+    <span class="c1"># micro_recs_str = recall_label + &quot;\t&quot;.join([&quot;%.1f&quot;%val for val in micro_recs])</span>
+    <span class="c1"># micro_f_ms_str = f_measure_label + &quot;\t&quot;.join([&quot;%.1f&quot;%val for val in micro_f_ms])</span>
+
+    <span class="c1"># print micro_precs_str</span>
+    <span class="c1"># print micro_recs_str</span>
+    <span class="c1"># print micro_f_ms_str</span>
+
+<div class="viewcode-block" id="score_saver"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.score_saver">[docs]</a><span class="k">def</span> <span class="nf">score_saver</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;evaldata&quot;</span><span class="p">,</span> <span class="n">skipcase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+    <span class="n">cm_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_cm.npy&quot;</span> <span class="o">%</span> <span class="n">identifier</span><span class="p">)</span>
+    <span class="n">prec_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_prec.npy&quot;</span> <span class="o">%</span> <span class="n">identifier</span><span class="p">)</span>
+    <span class="n">rec_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_rec.npy&quot;</span> <span class="o">%</span> <span class="n">identifier</span><span class="p">)</span>
+    <span class="n">f_m_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_f_m.npy&quot;</span> <span class="o">%</span> <span class="n">identifier</span><span class="p">)</span>
+
+    <span class="c1"># check whether the scores have been already calculated</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f_m_fn</span><span class="p">)</span> <span class="ow">and</span> <span class="n">skipcase</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;[I]The scores have been already calculated. Skip on &#39;</span><span class="si">%s</span><span class="s2">&#39;. &quot;</span> <span class="o">%</span> <span class="n">identifier</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="n">cm</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">calculate_scores</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="n">verbosity</span><span class="p">)</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">cm_fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cm</span><span class="p">))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">prec_fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">rec_fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f_m_fn</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">))</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">label_path</span><span class="p">)</span>
+            <span class="n">classified</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">classified_path</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">quit</span><span class="p">()</span>
+
+        <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">classified</span><span class="p">)</span>
+
+        <span class="nb">print</span> <span class="n">cm</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">f_m</span> <span class="o">=</span> <span class="n">calculate_scores</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+        <span class="n">output_f_m_filename</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">label_path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;_labele.npy&quot;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;_F-measure.npy&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_f_m_filename</span><span class="p">,</span> <span class="n">f_m</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">ArgParse</span><span class="p">():</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Evaluate on the Keras platform.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># file or folder path: </span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--label_path&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;label_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> 
+                            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;model/fine-tuned_vgg-16.model&quot;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;[string]A model file including a graph and weights.&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;--classified_path&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;classified_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> 
+                            <span class="n">default</span><span class="o">=</span><span class="s2">&quot;model/fine-tuned_vgg-16.model&quot;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;[string]A model file including a graph and weights.&#39;</span><span class="p">)</span>
+
+
+        <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="n">ArgParse</span><span class="p">()</span>
+
+    <span class="n">main</span><span class="p">()</span>
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>

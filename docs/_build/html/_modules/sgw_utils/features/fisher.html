@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sgw_utils.features.fisher &#8212; sgw_utils  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for sgw_utils.features.fisher</h1><div class="highlight"><pre>
+<span></span><span class="c1">#Author: Jacob Gildenblat, 2014</span>
+<span class="c1">#License: you may use this for whatever you like </span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">multivariate_normal</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">svm</span>
+<span class="kn">import</span> <span class="nn">dsift_extractor</span> <span class="k">as</span> <span class="nn">dsift</span>
+
+<div class="viewcode-block" id="dictionary"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.dictionary">[docs]</a><span class="k">def</span> <span class="nf">dictionary</span><span class="p">(</span><span class="n">descriptors</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+	<span class="n">em</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">EM</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+	<span class="n">em</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">descriptors</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">getMat</span><span class="p">(</span><span class="s2">&quot;means&quot;</span><span class="p">)),</span> \
+		<span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">getMatVector</span><span class="p">(</span><span class="s2">&quot;covs&quot;</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">em</span><span class="o">.</span><span class="n">getMat</span><span class="p">(</span><span class="s2">&quot;weights&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="image_descriptors_original"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.image_descriptors_original">[docs]</a><span class="k">def</span> <span class="nf">image_descriptors_original</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">))</span>
+	<span class="n">_</span> <span class="p">,</span> <span class="n">descriptors</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">SIFT</span><span class="p">()</span><span class="o">.</span><span class="n">detectAndCompute</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">descriptors</span></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">my function (segawa)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="image_descriptors"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.image_descriptors">[docs]</a><span class="k">def</span> <span class="nf">image_descriptors</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dense_steps</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">))</span>
+	<span class="n">_</span> <span class="p">,</span> <span class="n">descriptors</span> <span class="o">=</span> <span class="n">dsift</span><span class="o">.</span><span class="n">denseSIFT</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">descriptors</span></div>
+
+
+<div class="viewcode-block" id="folder_descriptors_original"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.folder_descriptors_original">[docs]</a><span class="k">def</span> <span class="nf">folder_descriptors_original</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.jpg&quot;</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating descriptos. Number of images is&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">image_descriptors</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">my function (segawa)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="folder_descriptors"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.folder_descriptors">[docs]</a><span class="k">def</span> <span class="nf">folder_descriptors</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">dense_steps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">):</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">extension</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating descriptors. Number of images is </span><span class="si">%d</span><span class="s2">. &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">image_descriptors</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">)</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="likelihood_moment"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.likelihood_moment">[docs]</a><span class="k">def</span> <span class="nf">likelihood_moment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ytk</span><span class="p">,</span> <span class="n">moment</span><span class="p">):</span>	
+	<span class="n">x_moment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">moment</span><span class="p">)</span> <span class="k">if</span> <span class="n">moment</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+	<span class="k">return</span> <span class="n">x_moment</span> <span class="o">*</span> <span class="n">ytk</span></div>
+
+<div class="viewcode-block" id="likelihood_statistics"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.likelihood_statistics">[docs]</a><span class="k">def</span> <span class="nf">likelihood_statistics</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">weights</span><span class="p">):</span>
+	<span class="n">gaussians</span><span class="p">,</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span><span class="n">s2</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">{}</span>
+	<span class="n">samples</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)),</span> <span class="n">samples</span><span class="p">)</span>
+	
+	<span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">covs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="p">]</span>
+	<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+		<span class="n">gaussians</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">g_k</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">g_k</span> <span class="ow">in</span> <span class="n">g</span><span class="p">])</span>
+
+	<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)):</span>
+		<span class="n">s0</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">s1</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">s2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+		<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+			<span class="n">probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">gaussians</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">weights</span><span class="p">)</span>
+			<span class="n">probabilities</span> <span class="o">=</span> <span class="n">probabilities</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)</span>
+			<span class="n">s0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">s0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">likelihood_moment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+			<span class="n">s1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">likelihood_moment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+			<span class="n">s2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">likelihood_moment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span></div>
+
+<div class="viewcode-block" id="fisher_vector_weights"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_vector_weights">[docs]</a><span class="k">def</span> <span class="nf">fisher_vector_weights</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([((</span><span class="n">s0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">T</span> <span class="o">*</span> <span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))])</span></div>
+
+<div class="viewcode-block" id="fisher_vector_means"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_vector_means">[docs]</a><span class="k">def</span> <span class="nf">fisher_vector_means</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([(</span><span class="n">s1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">s0</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))])</span></div>
+
+<div class="viewcode-block" id="fisher_vector_sigma"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_vector_sigma">[docs]</a><span class="k">def</span> <span class="nf">fisher_vector_sigma</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([(</span><span class="n">s2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">s1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>  <span class="o">+</span> <span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">sigma</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">*</span> <span class="n">s0</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">*</span><span class="n">sigma</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>  <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))])</span></div>
+
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">fisher_vector</span><span class="p">):</span>
+	<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fisher_vector</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">fisher_vector</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">v</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="fisher_vector"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_vector">[docs]</a><span class="k">def</span> <span class="nf">fisher_vector</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+	<span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span>  <span class="n">likelihood_statistics</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+	<span class="n">T</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">diagonal</span><span class="p">(</span><span class="n">covs</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">covs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="n">fisher_vector_weights</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+	<span class="n">b</span> <span class="o">=</span> <span class="n">fisher_vector_means</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+	<span class="n">c</span> <span class="o">=</span> <span class="n">fisher_vector_sigma</span><span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+	<span class="n">fv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">c</span><span class="p">)])</span>
+	<span class="n">fv</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">fv</span></div>
+
+<div class="viewcode-block" id="generate_gmm"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.generate_gmm">[docs]</a><span class="k">def</span> <span class="nf">generate_gmm</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">dense_steps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">):</span>
+	<span class="n">words</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">folder_descriptors</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span> <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">)])</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training GMM of size&quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+	<span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">dictionary</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+	<span class="c1">#Throw away gaussians with weights that are too small:</span>
+	<span class="n">th</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">N</span>
+	<span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)),</span> <span class="n">means</span><span class="p">)</span> <span class="k">if</span> <span class="n">weights</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span><span class="p">])</span>
+	<span class="n">covs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)),</span> <span class="n">covs</span><span class="p">)</span> <span class="k">if</span> <span class="n">weights</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span><span class="p">])</span>
+	<span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)),</span> <span class="n">weights</span><span class="p">)</span> <span class="k">if</span> <span class="n">weights</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">th</span><span class="p">])</span>
+
+	<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">working_folder</span> <span class="o">+</span> <span class="s2">&quot;/means.gmm&quot;</span><span class="p">,</span> <span class="n">means</span><span class="p">)</span>
+	<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">working_folder</span> <span class="o">+</span> <span class="s2">&quot;/covs.gmm&quot;</span><span class="p">,</span> <span class="n">covs</span><span class="p">)</span>
+	<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">working_folder</span> <span class="o">+</span> <span class="s2">&quot;/weights.gmm&quot;</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">weights</span></div>
+
+<div class="viewcode-block" id="get_fisher_vectors_from_folder_original"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.get_fisher_vectors_from_folder_original">[docs]</a><span class="k">def</span> <span class="nf">get_fisher_vectors_from_folder_original</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">):</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.jpg&quot;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">fisher_vector</span><span class="p">(</span><span class="n">image_descriptors</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="o">*</span><span class="n">gmm</span><span class="p">)</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="get_fisher_vectors_from_folder"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.get_fisher_vectors_from_folder">[docs]</a><span class="k">def</span> <span class="nf">get_fisher_vectors_from_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">):</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">extension</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">fisher_vector</span><span class="p">(</span><span class="n">image_descriptors</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">),</span> <span class="o">*</span><span class="n">gmm</span><span class="p">)</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="fisher_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_features">[docs]</a><span class="k">def</span> <span class="nf">fisher_features</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;fisher_features.npy&quot;</span><span class="p">):</span>
+	<span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span>
+	<span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">get_fisher_vectors_from_folder</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">])</span>
+
+	<span class="k">if</span> <span class="n">working_folder</span><span class="p">:</span>
+		<span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;Images in </span><span class="si">{}</span><span class="s1"> labeled as </span><span class="si">{}</span><span class="s1">. &#39;</span>
+		<span class="k">for</span> <span class="n">folder</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">))):</span>
+			<span class="nb">print</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+		<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">features</span></div>
+	
+<div class="viewcode-block" id="load_fisher_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.load_fisher_features">[docs]</a><span class="k">def</span> <span class="nf">load_fisher_features</span><span class="p">(</span><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;fisher_features.npy&quot;</span><span class="p">):</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Read file &#39;</span><span class="si">%s</span><span class="s2">&#39; in the workspace to get fisher features.&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="p">)</span>
+	<span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span> <span class="n">file</span> <span class="p">)</span>
+	<span class="k">return</span> <span class="n">features</span></div>
+
+
+<div class="viewcode-block" id="get_args"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.get_args">[docs]</a><span class="k">def</span> <span class="nf">get_args</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span> <span class="p">,</span> <span class="s2">&quot;--dir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Directory with images&quot;</span> <span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-g&quot;</span> <span class="p">,</span> <span class="s2">&quot;--loadgmm&quot;</span> <span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Load Gmm dictionary&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span> <span class="p">,</span> <span class="s2">&quot;--number&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of words in dictionary&quot;</span> <span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">args</span></div>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+	<span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
+	<span class="n">working_folder</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">dir</span>
+
+	<span class="n">gmm</span> <span class="o">=</span> <span class="n">load_gmm</span><span class="p">(</span><span class="n">working_folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">loadgmm</span> <span class="k">else</span> <span class="n">generate_gmm</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+	<span class="n">fisher_features</span> <span class="o">=</span> <span class="n">fisher_features</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">)</span>
+	<span class="c1">#TBD, split the features into training and validation</span>
+	<span class="n">classifier</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">gmm</span><span class="p">,</span> <span class="n">fisher_features</span><span class="p">)</span>
+	<span class="n">rate</span> <span class="o">=</span> <span class="n">success_rate</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">fisher_features</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Success rate is&quot;</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sgw_utils.features.gabor &#8212; sgw_utils  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for sgw_utils.features.gabor</h1><div class="highlight"><pre>
+<span></span><span class="c1">#Author: Jacob Gildenblat, 2014</span>
+<span class="c1">#License: you may use this for whatever you like </span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">svm</span>
+<span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="k">import</span> <span class="n">joblib</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">signal</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="k">import</span> <span class="n">gabor_kernel</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Pool</span>
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+
+<div class="viewcode-block" id="get_args"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.get_args">[docs]</a><span class="k">def</span> <span class="nf">get_args</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-d&#39;</span> <span class="p">,</span> <span class="s2">&quot;--dir&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Directory with images&quot;</span> <span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span> <span class="p">,</span> <span class="s2">&quot;--output_dir&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output_dir&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output Directory. &quot;</span> <span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-g&quot;</span> <span class="p">,</span> <span class="s2">&quot;--loadgf&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;loadgf&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Load Gabor features from a file. &quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-e&#39;</span> <span class="p">,</span> <span class="s2">&quot;--extension&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;extension&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Extension of images. &quot;</span> <span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;jpg&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div>
+
+<span class="c1"># def get_gabor_map(shape, rot_degs=range(0, 180, 45)):</span>
+
+<span class="c1">#     # determine parameters for DFT Gabor distribution</span>
+<span class="c1">#     center_freq = 2.0**int(np.floor(np.log2(shape[0]))) * np.sqrt(2.0) * 0.25</span>
+<span class="c1">#     gauss_mean = np.array([center_freq, 0.0])</span>
+
+<span class="c1">#     freq_bandwidth = 1.0</span>
+<span class="c1">#     angle_deg_bandwidth = 45.0</span>
+<span class="c1">#     var_u = center_freq / np.sqrt(2) * (2.0**freq_bandwidth - 1.0) / (2.0**freq_bandwidth + 1.0)</span>
+<span class="c1">#     var_v = center_freq / np.sqrt(2) * np.tan(np.radians(angle_deg_bandwidth / 2.0))</span>
+<span class="c1">#     gauss_var = np.float32([var_u, var_v])</span>
+
+<span class="c1">#     norm_term = 1.0 / ( 4.0 * np.pi**2 * np.prod(gauss_var) )</span>
+
+<span class="c1">#     gabor_maps = []</span>
+<span class="c1">#     for deg in rot_degs:</span>
+<span class="c1">#         theta = np.radians(deg)</span>
+<span class="c1">#         c, s = np.cos(theta), np.sin(theta)</span>
+<span class="c1">#         R = np.matrix(&#39;{} {}; {} {}&#39;.format(c, -s, s, c)).astype(float)</span>
+
+<span class="c1">#         gabor_map = np.zeros(shape)</span>
+<span class="c1">#         for u in range(0, shape[1]):</span>
+<span class="c1">#             for v in range(0, shape[0]):</span>
+<span class="c1">#                 inv_loc_uv = np.dot(R.T, np.float32([u, v]))</span>
+
+<span class="c1">#                 # loc_mean = np.array([u_0, 0.0])</span>
+<span class="c1">#                 shift_loc_minus = (inv_loc_uv - gauss_mean) / gauss_var</span>
+<span class="c1">#                 shift_loc_plus  = (inv_loc_uv + gauss_mean) / gauss_var</span>
+<span class="c1">#                 exp_term1 = np.exp(-0.5 * np.sum(np.power(shift_loc_minus,2)))</span>
+<span class="c1">#                 exp_term2 = np.exp(-0.5 * np.sum(np.power(shift_loc_plus,2)))</span>
+
+<span class="c1">#                 gabor_map[u, v] = norm_term * exp_term1 * exp_term2</span>
+
+<span class="c1">#         gabor_maps += [gabor_map]</span>
+
+<span class="c1">#     return gabor_maps</span>
+
+<div class="viewcode-block" id="normalize_with_tanh"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.normalize_with_tanh">[docs]</a><span class="k">def</span> <span class="nf">normalize_with_tanh</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="calc_texture_energy"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.calc_texture_energy">[docs]</a><span class="k">def</span> <span class="nf">calc_texture_energy</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">w_size</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+
+    <span class="n">summation_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">w_size</span><span class="p">,</span> <span class="n">w_size</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">w_size</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">conved</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span> <span class="n">signal</span><span class="o">.</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">summation_filter</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">patch</span> <span class="ow">in</span> <span class="n">array</span><span class="p">]</span> <span class="p">)</span>
+    <span class="n">squated</span> <span class="o">=</span> <span class="n">conved</span> <span class="o">*</span> <span class="n">conved</span>
+
+    <span class="k">return</span> <span class="n">squated</span></div>
+
+<div class="viewcode-block" id="preprocessing_on_batch"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.preprocessing_on_batch">[docs]</a><span class="k">def</span> <span class="nf">preprocessing_on_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="n">preprocessed</span> <span class="o">=</span> <span class="n">batch</span> <span class="o">/</span> <span class="mf">255.0</span>
+    <span class="n">preprocessed</span> <span class="o">-=</span> <span class="mf">0.5</span>
+    <span class="n">preprocessed</span> <span class="o">*=</span> <span class="mf">2.0</span>
+    <span class="k">return</span> <span class="n">preprocessed</span></div>
+
+<div class="viewcode-block" id="gabor_descriptor"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.gabor_descriptor">[docs]</a><span class="k">def</span> <span class="nf">gabor_descriptor</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+    <span class="c1"># sample_batch, gabor_maps = args</span>
+    <span class="n">sample_batch</span><span class="p">,</span> <span class="n">gabor_kernels</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="c1"># preprocessed_sample_batch = preprocessing_on_batch(sample_batch)</span>
+
+    <span class="c1"># convolve_paris = np.array(list(it.product(preprocessed_sample_batch, gabor_kernels)))</span>
+    <span class="n">convolve_paris</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">sample_batch</span><span class="p">,</span> <span class="n">gabor_kernels</span><span class="p">)))</span>
+
+    <span class="n">filtered_sample_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span> <span class="n">signal</span><span class="o">.</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">in1</span><span class="p">,</span> <span class="n">in2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">in1</span><span class="p">,</span> <span class="n">in2</span> <span class="ow">in</span> <span class="n">convolve_paris</span> <span class="p">])</span>
+
+    <span class="n">total_energy</span> <span class="o">=</span> <span class="n">filtered_sample_batch</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_batch</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">filtered_sample_batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">filtered_sample_batch</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">total_energy</span> <span class="o">=</span> <span class="n">total_energy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># texture_energy = calc_texture_energy(total_energy)</span>
+
+    <span class="c1"># normalized_sample_batch = normalize_with_tanh(texture_energy)</span>
+    <span class="n">normalized_sample_batch</span> <span class="o">=</span> <span class="n">normalize_with_tanh</span><span class="p">(</span><span class="n">total_energy</span><span class="p">)</span>
+
+
+    <span class="c1"># # descrive gabor filter application</span>
+    <span class="c1"># dft_imgs = np.fft.fft2(sample_batch)</span>
+    <span class="c1"># dft_imgs = np.fft.fftshift(dft_imgs)</span>
+
+    <span class="c1"># gabored_dft_imgs = np.float32([ np.multiply(dft_imgs, rotated_gabor_map) for rotated_gabor_map in gabor_maps ])</span>
+    <span class="c1"># # swap so as to be (samples, directions, height, width)</span>
+    <span class="c1"># gabored_dft_imgs = np.swapaxes(gabored_dft_imgs, 0, 1)</span>
+
+    <span class="c1"># idft_imgs = np.fft.ifftshift(gabored_dft_imgs)</span>
+
+    <span class="c1"># normalized = nonlinear_normalize(idft_imgs)</span>
+
+    <span class="c1"># texture_energy = np.float32([ np.float32([calc_texture_energy(img) for img in img_for_directions]).flatten() </span>
+    <span class="c1">#                     for img_for_directions in  normalized ])</span>
+
+    <span class="c1"># return texture_energy</span>
+    <span class="n">normalized_sample_batch</span> <span class="o">=</span> <span class="n">normalized_sample_batch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_batch</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># total_energy = total_energy.reshape(len(sample_batch), -1)</span>
+    <span class="k">return</span> <span class="n">total_energy</span></div>
+
+
+<div class="viewcode-block" id="get_gabor_features_from_folder"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.get_gabor_features_from_folder">[docs]</a><span class="k">def</span> <span class="nf">get_gabor_features_from_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">extension</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s1">&#39;Calculate Gabor features for </span><span class="si">%d</span><span class="s1"> images. &#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+    <span class="n">image_batches</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">split_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">/</span> <span class="n">batch_size</span>
+    <span class="k">if</span> <span class="n">split_num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">image_batches</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">split_num</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s1">&#39;Splitted </span><span class="si">%d</span><span class="s1"> batches respectively including </span><span class="si">%d</span><span class="s1"> images. &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_batches</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_batches</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1"># gabor_maps = get_gabor_map(images[0].shape[:2], range(0, 180, 45))</span>
+
+    <span class="c1"># func_args = zip(image_batches, [gabor_maps] * len(image_batches))</span>
+
+    <span class="c1"># filter bank for:</span>
+    <span class="c1"># u = 0.2, 0.3, and 0.5</span>
+    <span class="c1"># theta = 0, 45, 90, 135</span>
+    <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+    <span class="n">degs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span>
+    <span class="n">gabor_bank_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">frequencies</span><span class="p">,</span> <span class="n">degs</span><span class="p">))</span>
+    <span class="n">gabor_kernels</span> <span class="o">=</span> <span class="p">[</span> <span class="n">gabor_kernel</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> 
+        <span class="n">theta</span><span class="o">=</span><span class="n">deg</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+        <span class="n">sigma_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_stds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">real</span> 
+        <span class="k">for</span> <span class="n">freq</span><span class="p">,</span> <span class="n">deg</span> <span class="ow">in</span> <span class="n">gabor_bank_params</span> <span class="p">]</span>
+
+    <span class="n">func_args</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">image_batches</span><span class="p">,</span> <span class="p">[</span><span class="n">gabor_kernels</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_batches</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">max_threads</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">gabor_descriptor</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">func_args</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">max_threads</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">gabor_descriptor</span><span class="p">,</span> <span class="n">func_args</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_gabor_features_from_folder_in_patchscale"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.get_gabor_features_from_folder_in_patchscale">[docs]</a><span class="k">def</span> <span class="nf">get_gabor_features_from_folder_in_patchscale</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">extension</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s1">&#39;Calculate Gabor features for </span><span class="si">%d</span><span class="s1"> images. &#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="n">gabor_kernels</span> <span class="o">=</span> <span class="p">[</span> <span class="n">gabor_kernel</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+        <span class="n">theta</span><span class="o">=</span><span class="n">deg</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+        <span class="n">sigma_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_stds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">real</span> 
+        <span class="k">for</span> <span class="n">deg</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.0</span> <span class="p">]</span>
+
+    <span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">frame_idx</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+
+        <span class="nb">print</span> <span class="s2">&quot;Processing on frame </span><span class="si">%d</span><span class="s2">...&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">frame_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">images</span> <span class="o">=</span> <span class="n">crop_imgs</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">patch_size</span><span class="o">=</span><span class="n">patch_size</span><span class="p">)</span>
+        <span class="n">image_batches</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">split_num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="o">/</span> <span class="n">batch_size</span>
+        <span class="k">if</span> <span class="n">split_num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">image_batches</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">images</span><span class="p">),</span> <span class="n">split_num</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="s1">&#39;Splitted </span><span class="si">%d</span><span class="s1"> batches respectively including </span><span class="si">%d</span><span class="s1"> images. &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_batches</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_batches</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">func_args</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">image_batches</span><span class="p">,</span> <span class="p">[</span><span class="n">gabor_kernels</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_batches</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">max_threads</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">frame_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">gabor_descriptor</span><span class="p">(</span><span class="o">*</span><span class="n">func_arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">func_arg</span> <span class="ow">in</span> <span class="n">func_args</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Pool</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">max_threads</span><span class="p">)</span>
+            <span class="n">frame_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">gabor_descriptor</span><span class="p">,</span> <span class="n">func_args</span><span class="p">))</span>
+        <span class="n">features</span> <span class="o">+=</span> <span class="n">frame_features</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">features</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="gabor_features_in_patchscale"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.gabor_features_in_patchscale">[docs]</a><span class="k">def</span> <span class="nf">gabor_features_in_patchscale</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> 
+    <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+    <span class="n">file</span><span class="o">=</span><span class="s2">&quot;gabor_features_for_evaluations.npy&quot;</span><span class="p">):</span>
+
+    <span class="c1"># Get subdirectories</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span>
+
+    <span class="nb">print</span> <span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> classes. &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_gabor_features_from_folder_in_patchscale</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="n">max_threads</span><span class="p">)</span> 
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">]</span>
+
+    <span class="n">output_feature_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_feature_filename</span><span class="p">,</span> <span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="nb">print</span> <span class="s2">&quot;Saved calculated features as </span><span class="si">%s</span><span class="s2">. &quot;</span> <span class="o">%</span> <span class="n">output_feature_filename</span>
+
+    <span class="k">return</span> <span class="n">features</span></div>
+
+<div class="viewcode-block" id="load_gabor_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.load_gabor_features">[docs]</a><span class="k">def</span> <span class="nf">load_gabor_features</span><span class="p">(</span><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;gabor_features.npy&quot;</span><span class="p">):</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Read file &#39;</span><span class="si">%s</span><span class="s2">&#39; in the workspace to get gabor features.&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="p">)</span>
+	<span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span> <span class="n">file</span> <span class="p">)</span>
+	<span class="k">return</span> <span class="n">features</span></div>
+<span class="c1"># For training: find directories of 2 classes and calculate features in whole image region</span>
+<div class="viewcode-block" id="gabor_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.gabor.gabor_features">[docs]</a><span class="k">def</span> <span class="nf">gabor_features</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;gabor_features.npy&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+    <span class="c1"># Get subdirectories</span>
+    <span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span>
+    <span class="nb">print</span> <span class="n">folders</span>
+
+    <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;Images in </span><span class="si">{}</span><span class="s1"> will be labeled as </span><span class="si">{}</span><span class="s1">. &#39;</span>
+    <span class="k">for</span> <span class="n">folder</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">))):</span>
+        <span class="nb">print</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+    <span class="nb">print</span> <span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> class. &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_gabor_features_from_folder</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> 
+                    <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="n">max_threads</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">folders</span><span class="p">)]</span>
+
+    <span class="n">output_feature_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_feature_filename</span><span class="p">,</span> <span class="n">features</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s2">&quot;Saved calculated features as </span><span class="si">%s</span><span class="s2">. &quot;</span> <span class="o">%</span> <span class="n">output_feature_filename</span>
+
+    <span class="k">return</span> <span class="n">features</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
+    <span class="n">gabor_features</span> <span class="o">=</span> <span class="n">gabor_features</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">extension</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;gabor_features.npy&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">loadgf</span> <span class="k">else</span> <span class="n">load_gabor_features</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="c1">#TBD, split the features into training and validation</span>
+    <span class="n">classifier</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">gabor_features</span><span class="p">)</span>
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">success_rate</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">gabor_features</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Success rate is&quot;</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
+    <span class="n">save_svm</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/svm.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>

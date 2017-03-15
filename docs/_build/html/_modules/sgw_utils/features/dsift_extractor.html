@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sgw_utils.features.dsift_extractor &#8212; sgw_utils  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for sgw_utils.features.dsift_extractor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">option parser</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="OptParser"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.dsift_extractor.OptParser">[docs]</a><span class="k">def</span> <span class="nf">OptParser</span><span class="p">():</span>
+
+    <span class="kn">from</span> <span class="nn">optparse</span> <span class="k">import</span> <span class="n">OptionParser</span>
+    <span class="kn">from</span> <span class="nn">optparse</span> <span class="k">import</span> <span class="n">OptionGroup</span>
+
+    <span class="c1"># description</span>
+    <span class="n">psr</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.1&quot;</span><span class="p">,</span> 
+                       <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description: This module provides an image feature of dense SIFT based fisher vector. &quot;</span>
+                                    <span class="o">+</span><span class="s2">&quot;This can be used as main module for a test, not only as a imported library.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># essencial options</span>
+    <span class="n">essencial_grp</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">psr</span><span class="p">,</span> <span class="s2">&quot;Essensial&quot;</span><span class="p">)</span>
+    <span class="n">essencial_grp</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="s2">&quot;--input&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;inPath&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;[string]Input image path which must be specified.&quot;</span><span class="p">)</span>
+    <span class="n">psr</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">essencial_grp</span><span class="p">)</span>
+
+    <span class="c1"># arbitary options</span>
+    <span class="n">arbitary_grp</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">psr</span><span class="p">,</span> <span class="s2">&quot;Arbitary&quot;</span><span class="p">)</span>
+<span class="c1">#    arbitary_grp.add_option(&quot;--output&quot;, dest=&quot;outPath&quot;, default=None, type=&quot;string&quot;,</span>
+<span class="c1">#                    help = &quot;[string]Output file path. if no specified, output file will be written on the current directory. &quot;)</span>
+    <span class="n">arbitary_grp</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--dense_steps&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">,</span>
+                    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;[int]Steps for dense sampling on an input image. &quot;</span><span class="p">)</span>
+    <span class="n">psr</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">arbitary_grp</span><span class="p">)</span>
+
+    <span class="c1"># flags</span>
+    <span class="n">flags_grp</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">psr</span><span class="p">,</span> <span class="s2">&quot;Flags&quot;</span><span class="p">)</span>
+    <span class="n">flags_grp</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--show_params&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;flag_SHOWPARAMS&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> 
+                    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;A flag to check the specified parameters. &quot;</span><span class="p">)</span>
+    <span class="n">psr</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">flags_grp</span><span class="p">)</span>
+
+    <span class="c1"># parse options and arguments</span>
+    <span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">psr</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># check essencial options</span>
+    <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">inPath</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">psr</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="n">quit</span><span class="p">()</span>
+
+    <span class="c1"># check whether input file exists</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">inPath</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not found. Try again.&quot;</span> <span class="o">%</span> <span class="n">opt</span><span class="o">.</span><span class="n">inPath</span><span class="p">)</span>
+        <span class="n">quit</span><span class="p">()</span>
+
+    <span class="c1"># show parameter if the flag is True</span>
+    <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">flag_SHOWPARAMS</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;inPath: </span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">inPath</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="s2">&quot;max_dims: </span><span class="se">\n</span><span class="s2">  &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">max_dims</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">opt</span><span class="p">,</span> <span class="n">args</span></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">quickshow</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="quickshow"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.dsift_extractor.quickshow">[docs]</a><span class="k">def</span> <span class="nf">quickshow</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">WINDOW_NORMAL</span><span class="p">)</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="denseSIFT"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.dsift_extractor.denseSIFT">[docs]</a><span class="k">def</span> <span class="nf">denseSIFT</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Output SIFT vector for each dense sampled keypoints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get all dense keypoints</span>
+    <span class="c1"># keypoints = get_denseKeypoints(img, max_dims)</span>
+
+    <span class="c1"># descript with SIFT for all keypoints</span>
+
+    <span class="n">dense_detector</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FeatureDetector_create</span><span class="p">(</span><span class="s2">&quot;Dense&quot;</span><span class="p">)</span>
+
+    <span class="c1"># set parameters for dense point detector</span>
+    <span class="n">dense_detector</span><span class="o">.</span><span class="n">setDouble</span><span class="p">(</span><span class="s2">&quot;initFeatureScale&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">dense_detector</span><span class="o">.</span><span class="n">setInt</span><span class="p">(</span><span class="s2">&quot;initXyStep&quot;</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+    <span class="n">dense_detector</span><span class="o">.</span><span class="n">setInt</span><span class="p">(</span><span class="s2">&quot;initImgBound&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">steps</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    f = &#39;{} ({}): {}&#39;</span>
+<span class="sd">    for param in dense_detector.getParams():</span>
+<span class="sd">        type_ = dense_detector.paramType(param)</span>
+<span class="sd">        if type_ == cv2.PARAM_BOOLEAN:</span>
+<span class="sd">            print f.format(param, &#39;boolean&#39;, dense_detector.getBool(param))</span>
+<span class="sd">        elif type_ == cv2.PARAM_INT:</span>
+<span class="sd">            print f.format(param, &#39;int&#39;, dense_detector.getInt(param))</span>
+<span class="sd">        elif type_ == cv2.PARAM_REAL:</span>
+<span class="sd">            print f.format(param, &#39;real&#39;, dense_detector.getDouble(param))</span>
+<span class="sd">        else:</span>
+<span class="sd">            print param</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get dense points as keypoints</span>
+    <span class="n">kp</span> <span class="o">=</span> <span class="n">dense_detector</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+    <span class="c1"># Note: requires libopencv-nonfree-dev, python-opencv, libopencv-dev</span>
+    <span class="n">sift_extractor</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">DescriptorExtractor_create</span><span class="p">(</span><span class="s2">&quot;SIFT&quot;</span><span class="p">)</span>
+
+    <span class="c1"># extract SIFT descriptor for each keypoints</span>
+    <span class="n">kp</span><span class="p">,</span> <span class="n">des</span> <span class="o">=</span> <span class="n">sift_extractor</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">kp</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">kp</span><span class="p">,</span> <span class="n">des</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">opt</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">OptParser</span><span class="p">()</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">inPath</span><span class="p">)</span>
+    <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+    <span class="n">kp</span><span class="p">,</span> <span class="n">des</span> <span class="o">=</span> <span class="n">denseSIFT</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">opt</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">def draw_rect_for_dense_points(img, steps_along_height, steps_along_width):</span>
+
+<span class="sd">    points_tl = [ (x, y) </span>
+<span class="sd">                    for y in xrange(0, img.shape[0], steps_along_height) </span>
+<span class="sd">                    for x in xrange(0, img.shape[1], steps_along_width) ]</span>
+
+<span class="sd">    points_br = [ (x+2, y+2) for x, y in points_tl ]</span>
+
+<span class="sd">    for tl, br in zip(points_tl, points_br):</span>
+<span class="sd">       cv2.rectangle(img, tl, br, (0, 0, 255) )</span>
+
+<span class="sd">    quickshow(img)</span>
+
+
+<span class="sd">def get_denseKeypoints(img, max_dims):</span>
+<span class="sd">    # calculate dense sampling step from returned max_dims</span>
+<span class="sd">    sift_dims = 128</span>
+<span class="sd">    aspect_ratio = float(img.shape[0]) / float(img.shape[1])</span>
+<span class="sd">    print &quot;aspect_ratio: &quot;+str(aspect_ratio)</span>
+
+<span class="sd">    possible_points = int(max_dims / sift_dims)</span>
+<span class="sd">    print &quot;possible_points: &quot;+str(possible_points)</span>
+<span class="sd">    points_along_height = int(possible_points * aspect_ratio)</span>
+<span class="sd">    points_along_width = possible_points - points_along_height</span>
+<span class="sd">    print &quot;points_along_height: &quot;+str(points_along_height)</span>
+<span class="sd">    print &quot;points_along_width: &quot;+str(points_along_width)</span>
+
+<span class="sd">    steps_along_height = int(img.shape[0] / points_along_height)</span>
+<span class="sd">    steps_along_width =  int(img.shape[1] / points_along_width)</span>
+
+<span class="sd">    print &quot;steps_along_height: &quot;+str(steps_along_height)</span>
+<span class="sd">    print &quot;steps_along_width: &quot;+str(steps_along_width)</span>
+
+<span class="sd">    # top left of each 4x4 rectangulars</span>
+<span class="sd">    keypoints_tl = [ (x, y) </span>
+<span class="sd">                    for y in xrange(0, img.shape[0], steps_along_height) </span>
+<span class="sd">                    for x in xrange(0, img.shape[1], steps_along_width) ]</span>
+
+<span class="sd">    return keypoints_tl</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>
