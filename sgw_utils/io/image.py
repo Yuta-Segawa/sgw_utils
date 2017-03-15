@@ -3,8 +3,6 @@ import numpy as np
 from keras.preprocessing import image
 from multiprocessing import Process, Queue, Pool
 from keras.preprocessing.image import ImageDataGenerator
-import tensorflow as tf
-import keras.backend as K
 import itertools as it
 from keras.applications.imagenet_utils import preprocess_input
 from keras.utils.np_utils import to_categorical
@@ -214,7 +212,7 @@ def split_into_batches(data, batch_size=100):
     """Split input data into some batches. 
 
     :param data: Target data in numpy array. 
-    :batch_size: Size of batches. This works based on numpy function 'array_split'. 
+    :param batch_size: Size of batches. This works based on numpy function 'array_split'. 
     :return: List of Batches. 
     """
     if len(data) <= batch_size:

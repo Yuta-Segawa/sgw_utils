@@ -234,9 +234,11 @@
 
 <span class="sd">    :param images: Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input. </span>
 <span class="sd">    :param type: Preprocessing type. You can choose from &#39;inception&#39;, &#39;vgg&#39;, and &#39;disable&#39;: </span>
+
 <span class="sd">        - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). </span>
 <span class="sd">        - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. </span>
 <span class="sd">        - disable: Not apply any methods of preprocessing. </span>
+
 <span class="sd">    :param bool vervosity: Vervosity on displaying status. </span>
 <span class="sd">    :return: Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]). </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -275,10 +277,12 @@
     <span class="sd">&quot;&quot;&quot;Helper to easily determine which feature to be returned. </span>
 <span class="sd">    </span>
 <span class="sd">    :param feature_keyword: Keyword for feature data which will be returned finally: </span>
+
 <span class="sd">        - If a path to a file of features is given, this will return loaded numpy array. </span>
 <span class="sd">        - If a type of feature and image_dir are given, this will return calculated features with the type. </span>
 <span class="sd">            - Now &#39;gabor&#39; and &#39;fisher&#39; are available as feature types. </span>
 <span class="sd">        - If an unrecognized string or None is given, this will return None. </span>
+<span class="sd">    </span>
 <span class="sd">    :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. </span>
 <span class="sd">    :param output_dir: Output directory for calculated feature file. This will be also ignored when feature file is already existing. </span>
 <span class="sd">    :param identifier: Identifier of file name of features. This will be used as like &quot;&lt;identifier&gt;_&lt;feature_keyword&gt;_features.npy&quot;</span>

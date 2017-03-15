@@ -215,15 +215,17 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>feature_keyword</strong> &#8211; <p>Keyword for feature data which will be returned finally: 
-- If a path to a file of features is given, this will return loaded numpy array. 
-- If a type of feature and image_dir are given, this will return calculated features with the type.</p>
-<blockquote>
-<div><ul>
+<li><strong>feature_keyword</strong> &#8211; <p>Keyword for feature data which will be returned finally:</p>
+<ul>
+<li>If a path to a file of features is given, this will return loaded numpy array.</li>
+<li><dl class="first docutils">
+<dt>If a type of feature and image_dir are given, this will return calculated features with the type. </dt>
+<dd><ul class="first last">
 <li>Now &#8216;gabor&#8217; and &#8216;fisher&#8217; are available as feature types.</li>
 </ul>
-</div></blockquote>
-<ul>
+</dd>
+</dl>
+</li>
 <li>If an unrecognized string or None is given, this will return None.</li>
 </ul>
 </li>
@@ -350,10 +352,13 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>images</strong> &#8211; Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input.</li>
-<li><strong>type</strong> &#8211; Preprocessing type. You can choose from &#8216;inception&#8217;, &#8216;vgg&#8217;, and &#8216;disable&#8217;: 
-- inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
-- vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
-- disable: Not apply any methods of preprocessing.</li>
+<li><strong>type</strong> &#8211; <p>Preprocessing type. You can choose from &#8216;inception&#8217;, &#8216;vgg&#8217;, and &#8216;disable&#8217;:</p>
+<ul>
+<li>inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0).</li>
+<li>vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras.</li>
+<li>disable: Not apply any methods of preprocessing.</li>
+</ul>
+</li>
 <li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
 </ul>
 </td>
