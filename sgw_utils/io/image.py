@@ -74,7 +74,7 @@ def load_images_from_dirs(basedir, classnames,
     :param extension: Suffix of images to be loaded. 
     :param max_smps: Limitation of images to be loaded. Default of '-1' means the entire images will be loaded.  
     :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
-    :pamar bool vervosity: Vervosity on displaying status. 
+    :param bool vervosity: Vervosity on displaying status. 
     :return: Loaded and resized images as list of numpy array in shape of (samples_num, image_shape[0], image_shape[1]). 
     """
 
@@ -138,7 +138,7 @@ def load_images_in_dir(dirname,
     :param extension: Suffix of images to be loaded. 
     :param max_smps: Limitation of images to be loaded. Default of '-1' means the entire images will be loaded.  
     :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
-    :pamar bool vervosity: Vervosity on displaying status. 
+    :param bool vervosity: Vervosity on displaying status. 
     :return: Loaded and resized images as numpy array in shape of (classes_num, samples_num, image_shape[0], image_shape[1]). 
     """
 
@@ -187,7 +187,7 @@ def preprocess_on_images(images, type='inception', vervosity=1):
         - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
         - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
         - disable: Not apply any methods of preprocessing. 
-    :pamar bool vervosity: Vervosity on displaying status. 
+    :param bool vervosity: Vervosity on displaying status. 
     :return: Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]). 
     """
 
@@ -225,10 +225,10 @@ def feature_select_switcher(feature_keyword,
     """Helper to easily determine which feature to be returned. 
     
     :param feature_keyword: Keyword for feature data which will be returned finally: 
-        1. If a path to a file of features is given, this will return loaded numpy array. 
-        2. If a type of feature and image_dir are given, this will return calculated features with the type. 
-            - Now 'gabor' and 'fisher' are available as a feature type. 
-        3. If an unrecognized string or None is given, this will return None. 
+        - If a path to a file of features is given, this will return loaded numpy array. 
+        - If a type of feature and image_dir are given, this will return calculated features with the type. 
+            - Now 'gabor' and 'fisher' are available as feature types. 
+        - If an unrecognized string or None is given, this will return None. 
     :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. 
     :param output_dir: Output directory for calculated feature file. This will be also ignored when feature file is already existing. 
     :param identifier: Identifier of file name of features. This will be used as like "<identifier>_<feature_keyword>_features.npy"
