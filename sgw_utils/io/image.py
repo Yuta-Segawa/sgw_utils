@@ -7,26 +7,21 @@ import tensorflow as tf
 import keras.backend as K
 import itertools as it
 from keras.applications.imagenet_utils import preprocess_input
-from keras.utils.np_utils import to_categorical, probas_to_classes
+from keras.utils.np_utils import to_categorical
 from sgw_utils.features import gabor, fisher
 
-# this script includes 2 types of image preparation modules:
-# 1. load all images at one time and feed images from RAM
-# 2. load batch images from directory and feed the images
-
-##############
-### common ###
-##############
-
 def convert_to_onehot(labels):
+    """Convert label array to one-hot vector by Keras function 'to_categorical'. 
+    :param labels: Numpy integer array representing label indices. 
+    """
     nb_classes = labels.max()
     return to_categorical(lables, nb_classes)
 
-####################################
-### for local pattern prediction ###
-####################################
-
 def get_crop_locs(shape, patch_size=32):
+    """Get locations where patches are cropped in a source image. 
+    :param shape: Shape of source image you suppose. 
+    :param patch_size: The edge length of cropped patches. 
+    """
     tl_x_locs = np.arange(0, shape[1], patch_size)
     tl_y_locs = np.arange(0, shape[0], patch_size)
     tl_locs = np.array(list(it.product(tl_y_locs, tl_x_locs)))
@@ -34,6 +29,10 @@ def get_crop_locs(shape, patch_size=32):
     return zip(tl_locs, br_locs)
 
 def get_crop_masks(shape, patch_size=32):
+    """Get masks for cropping regions in a source image. 
+    :param shape: Shape of source image you suppose. 
+    :param patch_size: The edge length of cropped patches. 
+    """
     locs = get_crop_locs(shape, patch_size)
     loc_masks = []
     for l in locs: 
