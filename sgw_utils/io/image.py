@@ -184,9 +184,11 @@ def preprocess_on_images(images, type='inception', vervosity=1):
 
     :param images: Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input. 
     :param type: Preprocessing type. You can choose from 'inception', 'vgg', and 'disable': 
+
         - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
         - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
         - disable: Not apply any methods of preprocessing. 
+
     :param bool vervosity: Vervosity on displaying status. 
     :return: Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]). 
     """
@@ -225,10 +227,12 @@ def feature_select_switcher(feature_keyword,
     """Helper to easily determine which feature to be returned. 
     
     :param feature_keyword: Keyword for feature data which will be returned finally: 
+
         - If a path to a file of features is given, this will return loaded numpy array. 
         - If a type of feature and image_dir are given, this will return calculated features with the type. 
             - Now 'gabor' and 'fisher' are available as feature types. 
         - If an unrecognized string or None is given, this will return None. 
+    
     :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. 
     :param output_dir: Output directory for calculated feature file. This will be also ignored when feature file is already existing. 
     :param identifier: Identifier of file name of features. This will be used as like "<identifier>_<feature_keyword>_features.npy"

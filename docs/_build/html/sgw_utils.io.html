@@ -216,16 +216,16 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>feature_keyword</strong> &#8211; <p>Keyword for feature data which will be returned finally: 
-1. If a path to a file of features is given, this will return loaded numpy array. 
-2. If a type of feature and image_dir are given, this will return calculated features with the type.</p>
+- If a path to a file of features is given, this will return loaded numpy array. 
+- If a type of feature and image_dir are given, this will return calculated features with the type.</p>
 <blockquote>
 <div><ul>
-<li>Now &#8216;gabor&#8217; and &#8216;fisher&#8217; are available as a feature type.</li>
+<li>Now &#8216;gabor&#8217; and &#8216;fisher&#8217; are available as feature types.</li>
 </ul>
 </div></blockquote>
-<ol class="arabic" start="3">
+<ul>
 <li>If an unrecognized string or None is given, this will return None.</li>
-</ol>
+</ul>
 </li>
 <li><strong>image_dir</strong> &#8211; Directory including images for calculating features. This will be ignored when feature file is already existing.</li>
 <li><strong>output_dir</strong> &#8211; Output directory for calculated feature file. This will be also ignored when feature file is already existing.</li>
@@ -299,14 +299,11 @@
 <li><strong>extension</strong> &#8211; Suffix of images to be loaded.</li>
 <li><strong>max_smps</strong> &#8211; Limitation of images to be loaded. Default of &#8216;-1&#8217; means the entire images will be loaded.</li>
 <li><strong>max_threads</strong> &#8211; Max threads for multiprocessing. Default of &#8216;1&#8217; means the multiprocessing will be disable.</li>
+<li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Pamar bool vervosity:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">Vervosity on displaying status.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as list of numpy array in shape of (samples_num, image_shape[0], image_shape[1]).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as list of numpy array in shape of (samples_num, image_shape[0], image_shape[1]).</p>
 </td>
 </tr>
 </tbody>
@@ -327,14 +324,11 @@
 <li><strong>extension</strong> &#8211; Suffix of images to be loaded.</li>
 <li><strong>max_smps</strong> &#8211; Limitation of images to be loaded. Default of &#8216;-1&#8217; means the entire images will be loaded.</li>
 <li><strong>max_threads</strong> &#8211; Max threads for multiprocessing. Default of &#8216;1&#8217; means the multiprocessing will be disable.</li>
+<li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Pamar bool vervosity:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">Vervosity on displaying status.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as numpy array in shape of (classes_num, samples_num, image_shape[0], image_shape[1]).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as numpy array in shape of (classes_num, samples_num, image_shape[0], image_shape[1]).</p>
 </td>
 </tr>
 </tbody>
@@ -360,14 +354,11 @@
 - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
 - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
 - disable: Not apply any methods of preprocessing.</li>
+<li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Pamar bool vervosity:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">Vervosity on displaying status.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]).</p>
 </td>
 </tr>
 </tbody>
