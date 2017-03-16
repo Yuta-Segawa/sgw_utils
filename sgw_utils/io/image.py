@@ -5,17 +5,7 @@ from multiprocessing import Process, Queue, Pool
 from keras.preprocessing.image import ImageDataGenerator
 import itertools as it
 from keras.applications.imagenet_utils import preprocess_input
-from keras.utils.np_utils import to_categorical
 from sgw_utils.features import gabor, fisher
-
-def convert_to_onehot(labels):
-    """Convert label array to one-hot vector by Keras function 'to_categorical'. 
-
-    :param labels: Numpy integer array representing label indices. 
-    :return: One-hot labels. 
-    """
-    nb_classes = labels.max()
-    return to_categorical(lables, nb_classes)
 
 def get_crop_locs(shape, patch_size=32):
     """Get locations where patches are cropped in a source image. 
@@ -61,7 +51,6 @@ def resize_and_transpose(img_fn, shape):
 def mp_func(args):
     return resize_and_transpose(args[0], args[1])
 
-# for training adn evaluation
 def load_images_from_dirs(basedir, classnames, 
     image_shape=(299, 299), extension="*", max_smps=-1, max_threads=1, vervosity=1):
     """Load images from sub-directories and pre-resize them. 
@@ -207,18 +196,6 @@ def preprocess_on_images(images, type='inception', vervosity=1):
         print("[E]Invalid preprocessing type", type)
         return None
     return images
-
-def split_into_batches(data, batch_size=100):
-    """Split input data into some batches. 
-
-    :param data: Target data in numpy array. 
-    :param batch_size: Size of batches. This works based on numpy function 'array_split'. 
-    :return: List of Batches. 
-    """
-    if len(data) <= batch_size:
-        return data
-    else:
-        return np.array_split(data, range(batch_size, len(data), batch_size))
 
 def feature_select_switcher(feature_keyword, 
     image_dir=None, output_dir="./", identifier=None, extension="jpg", max_threads=1):

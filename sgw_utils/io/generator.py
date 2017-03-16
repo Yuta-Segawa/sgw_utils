@@ -1,212 +1,21 @@
 import os, glob, cv2, random
 import numpy as np
 from keras.preprocessing import image
-from multiprocessing import Process, Queue, Pool
 from keras.preprocessing.image import ImageDataGenerator
-import tensorflow as tf
+from keras.preprocessing.image import NumpyArrayIterator
 import keras.backend as K
 from keras.applications.imagenet_utils import preprocess_input
 
-
-# this script includes 2 types of image preparation modules:
-# 1. load all images at one time and feed images from RAM
-# 2. load batch images from directory and feed the images
-
-##############
-### common ###
-##############
-
-def convert_to_onehot(labels):
-    one_hot_vectors = np.float32([ np.zeros((len(class_label), len(labels))) for class_label in labels ])
-    for class_label, v in zip(labels, one_hot_vectors):
-        v[np.arange(len(v)), class_label.astype(int)] = 1
-    return one_hot_vectors.astype(float)
-
-####################################
-### for local pattern prediction ###
-####################################
-
-def crop_imgs(img, patch_size=32, return_locs=False):
-    import itertools as it
-    tl_x_locs = np.arange(0, img.shape[1], patch_size)
-    tl_y_locs = np.arange(0, img.shape[0], patch_size)
-    tl_locs = np.array(list(it.product(tl_y_locs, tl_x_locs)))
-    br_locs = tl_locs + np.array([patch_size, patch_size])
-    mirrored_img = np.hstack([np.vstack([img, img[::-1]]), np.vstack([img[::, ::-1], img[::-1, ::-1]])])
-    if return_locs:
-        return [mirrored_img[tl[0]:br[0], tl[1]:br[1]] for tl, br in zip(tl_locs, br_locs)], zip(tl_locs, br_locs)
-    else:
-        return [mirrored_img[tl[0]:br[0], tl[1]:br[1]] for tl, br in zip(tl_locs, br_locs)]
-
-
-##############
-### type 1 ###
-##############
-def resize_and_transpose(img_fn, shape):
-    return image.img_to_array(image.load_img(img_fn, target_size=shape)).astype(float)
-def mp_func(args):
-    return resize_and_transpose(args[0], args[1])
-
-# for training adn evaluation
-def load_images_from_dirs(basedir, classnames, 
-    image_shape=(256, 256), extension="jpg", max_smps=-1, mp_nums=1):
-    # only_labels: A flag to avoid to resizing images by reading only labels
-    # max_smps: Number of images per a class which should be loaded. -1 means load maximum number as possible
-
-    # get filenames from directories of the classes
-    dirnames = [ os.path.join(basedir, cls) for cls in classnames 
-                if os.path.exists(os.path.join(basedir, cls)) ]
-    if not len(dirnames) == len(classnames):
-        print("[I]Too few classes are found (expected %d classes, but %d). " % (len(classnames), len(dirnames)))
-        return None
-    img_filenames = [ sorted(glob.glob(os.path.join(dirname, "*.%s" % extension))) 
-                    for dirname in dirnames ]
-    # display info
-    for idx, (found_dir, fns) in enumerate(zip(dirnames, img_filenames)):
-        print("[I]Found %d images in %s. labeled them as %d. " % (len(fns), found_dir, idx))
-        if max_smps != -1: 
-            max_smps = min(len(fns), max_smps) 
-
-    # load all images
-    print("[I]Resize with shape %s" % str(image_shape))
-    mp_status = 'enabled with %d threads' % mp_nums if not mp_nums == 1 else 'disable'
-    print("[I]( Multi-Processing: %s)" % mp_status)
-
-    loaded_imgs = []
-    for i, cls_img_fns in enumerate(img_filenames):
-
-        if max_smps != -1:
-            random.shuffle(cls_img_fns)
-            cls_img_fns = cls_img_fns[0:max_smps]
-            
-        print("[I]Resizing %d images belonging to the class %d. " % (len(cls_img_fns), i))
-
-        if mp_nums > 1:
-            p = Pool(mp_nums)
-            loaded_imgs.append(np.array(p.map(mp_func, zip(cls_img_fns, [image_shape]*len(cls_img_fns))), float))
-            p.close()
-        else:
-            loaded_imgs.append(np.array([mp_func(args) for args in zip(cls_img_fns, [image_shape]*len(cls_img_fns))], float))
-
-    # make one-hot vectors as training labels
-    labels = [ np.array([idx] * len(imgs)).astype(int) for idx, imgs in enumerate(img_filenames) ]
-    if max_smps != -1:
-        labels = [ l[0:max_smps] for l in labels ]
-    one_hot_vectors = [  np.zeros((len(class_label), len(labels))) for class_label in labels ]
-    for class_label, v in zip(labels, one_hot_vectors):
-        v[np.arange(len(v)), class_label] = 1
-
-    print("[I]Loaded all images and labels. ")
-
-    return loaded_imgs, one_hot_vectors
-
-# for prediction
-def load_images_in_dir(dirname, 
-    image_shape=(256, 256), extension="jpg", max_smps=-1, mp_nums=1):
-    # only_labels: A flag to avoid to resizing images by reading only labels
-    # max_smps: Number of images per a class which should be loaded. -1 means load maximum number as possible
-
-    # get filenames from directories of the classes
-    img_filenames = sorted(glob.glob(os.path.join(dirname, "*.%s" % extension)))
-
-    # display info
-    print("[I]Found %d images in %s. " % (len(img_filenames), dirname))
-    if max_smps != -1: 
-        max_smps = min(len(img_filenames), max_smps) 
-
-    loaded_imgs = []
-    if max_smps != -1:
-        random.shuffle(img_filenames)
-        img_filenames = img_filenames[0:max_smps]
-
-    print("[I]Use %d images. " % len(img_filenames))
-
-    # load all images
-    if image_shape is None:
-        print("[I]Not any resizing. ")
-    else: 
-        print("[I]Resizing with shape %s..." % str(image_shape))
-    mp_status = 'enabled with %d threads' % mp_nums if not mp_nums == 1 else 'disable'
-    print("[I]( Multi-Processing: %s)" % mp_status)
-
-
-    if mp_nums > 1:
-        p = Pool(mp_nums)
-        loaded_imgs = np.array(p.map(mp_func, zip(img_filenames, [image_shape]*len(img_filenames)))).astype(float)
-        p.close()
-    else:
-        loaded_imgs = np.array([mp_func(args) for args in zip(img_filenames, [image_shape]*len(img_filenames))]).astype(float)
-
-    return loaded_imgs
-
-def preprocess_on_images(images, type='inception'):
-
-    # determinant preprocessing
-    print("[I]Applying preprocessing. ")
-    print("[I](Preprocessing type: %s)" % type)
-    if type == 'inception':
-        images /= 255.0
-        images -= 0.5
-        images *= 2.0
-    elif type  == 'vgg':
-        images = preprocess_input(images)
-    elif type == 'disable':
-        pass
-    else: 
-        print("[E]Invalid preprocessing type", type)
-        return None
-    return images
-
-def generator_preparation(images, labels, 
-    batch_size=10, type='inception', shuffle=False, 
-    save_image_prefix=None):
-
-    # transfromation in the preprocessing
-    datagen = ImageDataGenerator()
-
-    images = preprocess_on_images(images, type)
-
-    # fit the images to generator in order to image preprocessing
-    # datagen.fit(images)
-    generator = datagen.flow(X=images, y=labels, 
-        batch_size=batch_size, shuffle=shuffle, 
-        save_to_dir=save_image_prefix)
-
-    return generator
-
-def train_val_gen_preparation(images, labels, 
-    batch_size=10, split_rate=0.1, type='inception', shuffle=False, 
-    save_image_prefix=None):
-    
-    # transfromation in the preprocessing
-    datagen = ImageDataGenerator()
-
-    images = preprocess_on_images(images, type)
-
-    zipped = zip(images, labels)
-    random.shuffle(zipped)
-    X, y = list(zip(*zipped))
-
-    nb_val_smp = int(float(len(images))*split_rate)
-    train_X = np.array(X[:-nb_val_smp])
-    val_X   = np.array(X[nb_val_smp:])
-    train_y = np.array(y[:-nb_val_smp])
-    val_y   = np.array(y[nb_val_smp:])
-
-    train_gen = datagen.flow(X=train_X, y=train_y, 
-        batch_size=batch_size, shuffle=shuffle, 
-        save_to_dir=save_image_prefix)
-    val_gen = datagen.flow(X=val_X, y=val_y, 
-        batch_size=batch_size, shuffle=shuffle, 
-        save_to_dir=save_image_prefix)
-
-    return train_gen, val_gen
-
-
-##############
-### type 2 ###
-##############
 class ImageNetDataGenerator(ImageDataGenerator):
+    """Overloaded class on Keras 'ImageDataGenerator', 
+    which is aiming at including preprocess for 'inception' and 'vgg'. 
+    
+    self.rescale works as a kerword of preprocessing type like: 
+
+        - In case self.rescale = 'inception', preprocess on image in the same manner as GoogLeNet. 
+        - In case self.rescale = 'vgg', preprocess on image in the same manner as VGG16. 
+
+    """
     def standardize(self, x):
         if self.rescale:
 
@@ -238,14 +47,18 @@ class ImageNetDataGenerator(ImageDataGenerator):
         return x
 
 class DataIterator(ImageDataGenerator):
+    """Overloaded class on ImageDataGenerator for avoiding from any data augmentations. 
+    """
 
     def random_transform(self, x):
         # just returns the value without any transformations 
         return x
 
-from keras.preprocessing.image import NumpyArrayIterator
 
 class NumpyArrayIterator_LargeChannelAdapted(NumpyArrayIterator):
+    """Overloaded class on NumpyArrayIterator in order to let further data input even not formatted as images.   
+        by making a comment-out for exceptions on the input dimensionality. 
+    """
 
     def __init__(self, x, y, image_data_generator,
                  batch_size=32, shuffle=False, seed=None,
@@ -282,14 +95,58 @@ class NumpyArrayIterator_LargeChannelAdapted(NumpyArrayIterator):
         self.save_format = save_format
         super(NumpyArrayIterator, self).__init__(x.shape[0], batch_size, shuffle, seed)
 
+def generator_preparation(images, labels, 
+    batch_size=100, preprocessing_type='inception', shuffle=False, 
+    save_image_prefix=None):
+    """Create generator from images in a single directory. 
+
+    :param images: Images to be stacked on a quene of a generator. 
+    :param labels: Corresponidng labels. 
+
+        - If you use on Keras platform, you have to convert the label to one-hot format in advance. 
+    :param batch_size: Batch size when feeding from generator. 
+    :param type: Preprocessing type of images. See the documentation of 'image' module for the details.
+    :param shuffle: Flag to shuffle set of image and label before constructing a generator. 
+    :param save_image_prefix: See 'Image Preprocessing' documentation in Keras because of Keras-based implementation. 
+    :retrun: Generator object based on Keras. 
+    """
+
+    # transfromation in the preprocessing
+    datagen = ImageDataGenerator()
+
+    images = preprocess_on_images(images, type)
+
+    # fit the images to generator in order to image preprocessing
+    # datagen.fit(images)
+    generator = datagen.flow(X=images, y=labels, 
+        batch_size=batch_size, shuffle=shuffle, 
+        save_to_dir=save_image_prefix)
+
+    return generator
+
+
+
 def generator_preparation_from_dirs(dirpath, target_size, classes=None, 
-    batch_size=10, shuffle=False, preprocessing_type='inception',
+    batch_size=100, shuffle=False, preprocessing_type='inception',
     save_image_prefix=None, class_separation=False, validation_include=True):
-    
-    # Note: class_separation should be True only when not using ground truth labels i.e. in prediction. 
+    """Crate generators from at least one directories including images. 
+
+    :param dirpath: Base directory containing sub-directories. 
+    :param target_size: Shape for resizing images. None works as keep the original shape.
+    :param class: List of the sub-directories' naems arranged in order of class labels. 
+    None works as to load images from 'dirpath' directory (ingore any sub-directories). 
+    :param batch_size: Batch size when feeding from generator. 
+    :param preprocessing_type: Preprocessing type of images. See the documentation of 'image' module for the details.
+    :param shuffle: Flag to shuffle set of image and label before constructing a generator. 
+    :param save_image_prefix: See 'Image Preprocessing' documentation in Keras because of Keras-based implementation. 
+    :param class_separation: Flag to separate generators into classes. This flag is usually used in except training phase. 
+    Consequently, returned objects are arranged as list of generators for each class. 
+    :param validation_include: Flag to load images from subdirectories under each of 'train' and 'validation' directories. 
+    This flag is usually used only in training phase. 
+    :retrun: Generato object based on Keras. 
+   """    
 
 
-    # what 'classes' is None is meaning a process on only one directory directly
     if classes is None:
         classes = dirpath.rstrip("/").split("/")[-1]
         dirpath = "/".join(dirpath.rstrip("/").split("/")[:-1])
