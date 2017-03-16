@@ -172,9 +172,9 @@ def preprocess_on_images(images, type='inception', vervosity=1):
     :param images: Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input. 
     :param type: Preprocessing type. You can choose from 'inception', 'vgg', and 'disable': 
 
-        - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
-        - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
-        - disable: Not apply any methods of preprocessing. 
+            - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). 
+            - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. 
+            - disable: Not apply any methods of preprocessing. 
 
     :param bool vervosity: Vervosity on displaying status. 
     :return: Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]). 

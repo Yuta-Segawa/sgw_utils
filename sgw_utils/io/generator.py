@@ -133,16 +133,13 @@ def generator_preparation_from_dirs(dirpath, target_size, classes=None,
 
     :param dirpath: Base directory containing sub-directories. 
     :param target_size: Shape for resizing images. None works as keep the original shape.
-    :param class: List of the sub-directories' naems arranged in order of class labels. 
-    None works as to load images from 'dirpath' directory (ingore any sub-directories). 
+    :param class: List of the sub-directories' naems arranged in order of class labels. None works as to load images from 'dirpath' directory (ingore any sub-directories). 
     :param batch_size: Batch size when feeding from generator. 
     :param preprocessing_type: Preprocessing type of images. See the documentation of 'image' module for the details.
     :param shuffle: Flag to shuffle set of image and label before constructing a generator. 
     :param save_image_prefix: See 'Image Preprocessing' documentation in Keras because of Keras-based implementation. 
-    :param class_separation: Flag to separate generators into classes. This flag is usually used in except training phase. 
-    Consequently, returned objects are arranged as list of generators for each class. 
-    :param validation_include: Flag to load images from subdirectories under each of 'train' and 'validation' directories. 
-    This flag is usually used only in training phase. 
+    :param class_separation: Flag to separate generators into classes. This flag is usually used in except training phase. Consequently, returned objects are arranged as list of generators for each class. 
+    :param validation_include: Flag to load images from subdirectories under each of 'train' and 'validation' directories. This flag is usually used only in training phase. 
     :retrun: Generato object based on Keras. 
    """    
 

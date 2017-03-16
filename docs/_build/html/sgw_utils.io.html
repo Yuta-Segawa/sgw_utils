@@ -73,105 +73,6 @@
 <dl class="function">
 <dt id="sgw_utils.io.formatting.convert_to_onehot">
 <code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">convert_to_onehot</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#convert_to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.convert_to_onehot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.formatting.make_set_xy">
-<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">make_set_xy</code><span class="sig-paren">(</span><em>loaded_npy</em>, <em>label_type='sklearn'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#make_set_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.make_set_xy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.formatting.split_into_batches">
-<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">split_into_batches</code><span class="sig-paren">(</span><em>data</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#split_into_batches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.split_into_batches" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-sgw_utils.io.generator">
-<span id="sgw-utils-io-generator-module"></span><h2>sgw_utils.io.generator module<a class="headerlink" href="#module-sgw_utils.io.generator" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="sgw_utils.io.generator.DataIterator">
-<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">DataIterator</code><span class="sig-paren">(</span><em>featurewise_center=False</em>, <em>samplewise_center=False</em>, <em>featurewise_std_normalization=False</em>, <em>samplewise_std_normalization=False</em>, <em>zca_whitening=False</em>, <em>rotation_range=0.0</em>, <em>width_shift_range=0.0</em>, <em>height_shift_range=0.0</em>, <em>shear_range=0.0</em>, <em>zoom_range=0.0</em>, <em>channel_shift_range=0.0</em>, <em>fill_mode='nearest'</em>, <em>cval=0.0</em>, <em>horizontal_flip=False</em>, <em>vertical_flip=False</em>, <em>rescale=None</em>, <em>preprocessing_function=None</em>, <em>data_format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#DataIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.DataIterator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.ImageDataGenerator</span></code></p>
-<dl class="method">
-<dt id="sgw_utils.io.generator.DataIterator.random_transform">
-<code class="descname">random_transform</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#DataIterator.random_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.DataIterator.random_transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="sgw_utils.io.generator.ImageNetDataGenerator">
-<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">ImageNetDataGenerator</code><span class="sig-paren">(</span><em>featurewise_center=False</em>, <em>samplewise_center=False</em>, <em>featurewise_std_normalization=False</em>, <em>samplewise_std_normalization=False</em>, <em>zca_whitening=False</em>, <em>rotation_range=0.0</em>, <em>width_shift_range=0.0</em>, <em>height_shift_range=0.0</em>, <em>shear_range=0.0</em>, <em>zoom_range=0.0</em>, <em>channel_shift_range=0.0</em>, <em>fill_mode='nearest'</em>, <em>cval=0.0</em>, <em>horizontal_flip=False</em>, <em>vertical_flip=False</em>, <em>rescale=None</em>, <em>preprocessing_function=None</em>, <em>data_format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#ImageNetDataGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.ImageNetDataGenerator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.ImageDataGenerator</span></code></p>
-<dl class="method">
-<dt id="sgw_utils.io.generator.ImageNetDataGenerator.standardize">
-<code class="descname">standardize</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#ImageNetDataGenerator.standardize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.ImageNetDataGenerator.standardize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="sgw_utils.io.generator.NumpyArrayIterator_LargeChannelAdapted">
-<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">NumpyArrayIterator_LargeChannelAdapted</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>image_data_generator</em>, <em>batch_size=32</em>, <em>shuffle=False</em>, <em>seed=None</em>, <em>dim_ordering='default'</em>, <em>save_to_dir=None</em>, <em>save_prefix=''</em>, <em>save_format='jpeg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#NumpyArrayIterator_LargeChannelAdapted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.NumpyArrayIterator_LargeChannelAdapted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.NumpyArrayIterator</span></code></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.convert_to_onehot">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">convert_to_onehot</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#convert_to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.convert_to_onehot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.crop_imgs">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">crop_imgs</code><span class="sig-paren">(</span><em>img</em>, <em>patch_size=32</em>, <em>return_locs=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#crop_imgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.crop_imgs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.generator_preparation">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">generator_preparation</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em>, <em>batch_size=10</em>, <em>type='inception'</em>, <em>shuffle=False</em>, <em>save_image_prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#generator_preparation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.generator_preparation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.generator_preparation_from_dirs">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">generator_preparation_from_dirs</code><span class="sig-paren">(</span><em>dirpath</em>, <em>target_size</em>, <em>classes=None</em>, <em>batch_size=10</em>, <em>shuffle=False</em>, <em>preprocessing_type='inception'</em>, <em>save_image_prefix=None</em>, <em>class_separation=False</em>, <em>validation_include=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#generator_preparation_from_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.generator_preparation_from_dirs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.load_images_from_dirs">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">load_images_from_dirs</code><span class="sig-paren">(</span><em>basedir</em>, <em>classnames</em>, <em>image_shape=(256</em>, <em>256)</em>, <em>extension='jpg'</em>, <em>max_smps=-1</em>, <em>mp_nums=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#load_images_from_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.load_images_from_dirs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.load_images_in_dir">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">load_images_in_dir</code><span class="sig-paren">(</span><em>dirname</em>, <em>image_shape=(256</em>, <em>256)</em>, <em>extension='jpg'</em>, <em>max_smps=-1</em>, <em>mp_nums=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#load_images_in_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.load_images_in_dir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.mp_func">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">mp_func</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#mp_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.mp_func" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.preprocess_on_images">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">preprocess_on_images</code><span class="sig-paren">(</span><em>images</em>, <em>type='inception'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#preprocess_on_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.preprocess_on_images" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.resize_and_transpose">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">resize_and_transpose</code><span class="sig-paren">(</span><em>img_fn</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#resize_and_transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.resize_and_transpose" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.generator.train_val_gen_preparation">
-<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">train_val_gen_preparation</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em>, <em>batch_size=10</em>, <em>split_rate=0.1</em>, <em>type='inception'</em>, <em>shuffle=False</em>, <em>save_image_prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#train_val_gen_preparation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.train_val_gen_preparation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-sgw_utils.io.image">
-<span id="sgw-utils-io-image-module"></span><h2>sgw_utils.io.image module<a class="headerlink" href="#module-sgw_utils.io.image" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="sgw_utils.io.image.convert_to_onehot">
-<code class="descclassname">sgw_utils.io.image.</code><code class="descname">convert_to_onehot</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#convert_to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.convert_to_onehot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert label array to one-hot vector by Keras function &#8216;to_categorical&#8217;.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -185,6 +86,157 @@
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="sgw_utils.io.formatting.make_set_xy">
+<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">make_set_xy</code><span class="sig-paren">(</span><em>loaded_npy</em>, <em>label_type='sklearn'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#make_set_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.make_set_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arange numpy features to the format used for inputting to classifiers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>loaded_npy</strong> &#8211; Numpy features in shape of (classes_num, samples_num, dimensionality).</li>
+<li><strong>label_type</strong> &#8211; <p>Label type of platform where you will use returned set:</p>
+<ul>
+<li>sklearn: For scikit-learn platform like [0, 0, ..., 1, 1].</li>
+<li>keras: For Keras platform (one-hot representation) like [[1,0], [1,0], ..., [0,1], [0,1]].</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of (&lt;vertically stacked features&gt;, &lt;corresponding labels&gt;).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.formatting.split_into_batches">
+<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">split_into_batches</code><span class="sig-paren">(</span><em>data</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#split_into_batches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.split_into_batches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split input data into some batches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; Target data in numpy array.</li>
+<li><strong>batch_size</strong> &#8211; Size of batches. This works based on numpy function &#8216;array_split&#8217;.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of Batches.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.io.generator">
+<span id="sgw-utils-io-generator-module"></span><h2>sgw_utils.io.generator module<a class="headerlink" href="#module-sgw_utils.io.generator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sgw_utils.io.generator.DataIterator">
+<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">DataIterator</code><span class="sig-paren">(</span><em>featurewise_center=False</em>, <em>samplewise_center=False</em>, <em>featurewise_std_normalization=False</em>, <em>samplewise_std_normalization=False</em>, <em>zca_whitening=False</em>, <em>rotation_range=0.0</em>, <em>width_shift_range=0.0</em>, <em>height_shift_range=0.0</em>, <em>shear_range=0.0</em>, <em>zoom_range=0.0</em>, <em>channel_shift_range=0.0</em>, <em>fill_mode='nearest'</em>, <em>cval=0.0</em>, <em>horizontal_flip=False</em>, <em>vertical_flip=False</em>, <em>rescale=None</em>, <em>preprocessing_function=None</em>, <em>data_format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#DataIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.DataIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.ImageDataGenerator</span></code></p>
+<p>Overloaded class on ImageDataGenerator for avoiding from any data augmentations.</p>
+<dl class="method">
+<dt id="sgw_utils.io.generator.DataIterator.random_transform">
+<code class="descname">random_transform</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#DataIterator.random_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.DataIterator.random_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sgw_utils.io.generator.ImageNetDataGenerator">
+<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">ImageNetDataGenerator</code><span class="sig-paren">(</span><em>featurewise_center=False</em>, <em>samplewise_center=False</em>, <em>featurewise_std_normalization=False</em>, <em>samplewise_std_normalization=False</em>, <em>zca_whitening=False</em>, <em>rotation_range=0.0</em>, <em>width_shift_range=0.0</em>, <em>height_shift_range=0.0</em>, <em>shear_range=0.0</em>, <em>zoom_range=0.0</em>, <em>channel_shift_range=0.0</em>, <em>fill_mode='nearest'</em>, <em>cval=0.0</em>, <em>horizontal_flip=False</em>, <em>vertical_flip=False</em>, <em>rescale=None</em>, <em>preprocessing_function=None</em>, <em>data_format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#ImageNetDataGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.ImageNetDataGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.ImageDataGenerator</span></code></p>
+<p>Overloaded class on Keras &#8216;ImageDataGenerator&#8217;, 
+which is aiming at including preprocess for &#8216;inception&#8217; and &#8216;vgg&#8217;.</p>
+<p>self.rescale works as a kerword of preprocessing type like:</p>
+<blockquote>
+<div><ul class="simple">
+<li>In case self.rescale = &#8216;inception&#8217;, preprocess on image in the same manner as GoogLeNet.</li>
+<li>In case self.rescale = &#8216;vgg&#8217;, preprocess on image in the same manner as VGG16.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="sgw_utils.io.generator.ImageNetDataGenerator.standardize">
+<code class="descname">standardize</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#ImageNetDataGenerator.standardize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.ImageNetDataGenerator.standardize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sgw_utils.io.generator.NumpyArrayIterator_LargeChannelAdapted">
+<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">NumpyArrayIterator_LargeChannelAdapted</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>image_data_generator</em>, <em>batch_size=32</em>, <em>shuffle=False</em>, <em>seed=None</em>, <em>dim_ordering='default'</em>, <em>save_to_dir=None</em>, <em>save_prefix=''</em>, <em>save_format='jpeg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#NumpyArrayIterator_LargeChannelAdapted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.NumpyArrayIterator_LargeChannelAdapted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.NumpyArrayIterator</span></code></p>
+<p>Overloaded class on NumpyArrayIterator in order to let further data input even not formatted as images.   
+by making a comment-out for exceptions on the input dimensionality.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.generator.generator_preparation">
+<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">generator_preparation</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em>, <em>batch_size=100</em>, <em>preprocessing_type='inception'</em>, <em>shuffle=False</em>, <em>save_image_prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#generator_preparation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.generator_preparation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create generator from images in a single directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>images</strong> &#8211; Images to be stacked on a quene of a generator.</li>
+<li><strong>labels</strong> &#8211; <p>Corresponidng labels.</p>
+<ul>
+<li>If you use on Keras platform, you have to convert the label to one-hot format in advance.</li>
+</ul>
+</li>
+<li><strong>batch_size</strong> &#8211; Batch size when feeding from generator.</li>
+<li><strong>type</strong> &#8211; Preprocessing type of images. See the documentation of &#8216;image&#8217; module for the details.</li>
+<li><strong>shuffle</strong> &#8211; Flag to shuffle set of image and label before constructing a generator.</li>
+<li><strong>save_image_prefix</strong> &#8211; See &#8216;Image Preprocessing&#8217; documentation in Keras because of Keras-based implementation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retrun:</th><td class="field-body"><p class="first last">Generator object based on Keras.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.generator.generator_preparation_from_dirs">
+<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">generator_preparation_from_dirs</code><span class="sig-paren">(</span><em>dirpath</em>, <em>target_size</em>, <em>classes=None</em>, <em>batch_size=100</em>, <em>shuffle=False</em>, <em>preprocessing_type='inception'</em>, <em>save_image_prefix=None</em>, <em>class_separation=False</em>, <em>validation_include=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#generator_preparation_from_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.generator_preparation_from_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crate generators from at least one directories including images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dirpath</strong> &#8211; Base directory containing sub-directories.</li>
+<li><strong>target_size</strong> &#8211; Shape for resizing images. None works as keep the original shape.</li>
+<li><strong>class</strong> &#8211; List of the sub-directories&#8217; naems arranged in order of class labels.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>None works as to load images from &#8216;dirpath&#8217; directory (ingore any sub-directories). 
+:param batch_size: Batch size when feeding from generator. 
+:param preprocessing_type: Preprocessing type of images. See the documentation of &#8216;image&#8217; module for the details.
+:param shuffle: Flag to shuffle set of image and label before constructing a generator. 
+:param save_image_prefix: See &#8216;Image Preprocessing&#8217; documentation in Keras because of Keras-based implementation. 
+:param class_separation: Flag to separate generators into classes. This flag is usually used in except training phase. 
+Consequently, returned objects are arranged as list of generators for each class. 
+:param validation_include: Flag to load images from subdirectories under each of &#8216;train&#8217; and &#8216;validation&#8217; directories. 
+This flag is usually used only in training phase. 
+:retrun: Generato object based on Keras.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.io.image">
+<span id="sgw-utils-io-image-module"></span><h2>sgw_utils.io.image module<a class="headerlink" href="#module-sgw_utils.io.image" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="sgw_utils.io.image.crop_imgs">
 <code class="descclassname">sgw_utils.io.image.</code><code class="descname">crop_imgs</code><span class="sig-paren">(</span><em>img</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#crop_imgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.crop_imgs" title="Permalink to this definition">¶</a></dt>
@@ -374,27 +426,6 @@
 <dt id="sgw_utils.io.image.resize_and_transpose">
 <code class="descclassname">sgw_utils.io.image.</code><code class="descname">resize_and_transpose</code><span class="sig-paren">(</span><em>img_fn</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#resize_and_transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.resize_and_transpose" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="function">
-<dt id="sgw_utils.io.image.split_into_batches">
-<code class="descclassname">sgw_utils.io.image.</code><code class="descname">split_into_batches</code><span class="sig-paren">(</span><em>data</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#split_into_batches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.split_into_batches" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split input data into some batches.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> &#8211; Target data in numpy array.</li>
-<li><strong>batch_size</strong> &#8211; Size of batches. This works based on numpy function &#8216;array_split&#8217;.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of Batches.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
 
 </div>
 <div class="section" id="module-sgw_utils.io">
