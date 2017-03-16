@@ -5,6 +5,8 @@ from sklearn.externals import joblib
 
 
 class NN():
+    """Wrapper on sk-learn based NearestNeighbor model. 
+    """
 
     def __init__(self, n_neighbors=1, algorithm='ball_tree'):
         self.n_neighbors = n_neighbors

@@ -5,6 +5,9 @@ from sklearn.grid_search import GridSearchCV
 
 
 class SVM():
+    """Wrapper on sk-learn based NearestNeighbor model. 
+    """
+
 
     def __init__(self, kernel_type="linear", tol=0.001, max_iter=10000, grid_search=True):
 

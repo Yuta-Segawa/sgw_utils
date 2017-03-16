@@ -4,6 +4,12 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 
 def calculate_scores(cm, verbosity=True):
+    """Calculate precision, recall, and F-measure from confusion matrix. 
+
+    :param cm: Confusion matrix of ground truth and predictions. 
+    :param verbosity: Verbosity of showing status. 
+    :return: Tuple of precision, recall, and F-measure as numpy arrays. 
+    """
     true_positives = np.float32(np.diag(cm))
     false_positives = np.float32(np.sum(cm, axis=0) - true_positives)
     false_negatives = np.float32(np.sum(cm, axis=1) - true_positives)
@@ -26,20 +32,23 @@ def calculate_scores(cm, verbosity=True):
             print f.format("F-measure", f_m)
     return np.array(Precision), np.array(Recall), np.array(F_measure)
 
-def macro_micro_scores(dirpath, show_only_num=False):
-    # input arguments: 
-    ## dirpath: Path to directory including cm, prec, rec, f_m.npy files for entire videos. 
+def display_scores(dirpath, verbosity=False):
+    """Display summarized scores. 
 
-    precision_label = "Precision\t"
-    recall_label = "Recall\t"
-    f_measure_label = "F_measure\t"
-    accuracy_label = "Accuracy\t"
+    :param dirpath: Directory containing score files named as '*_cm.npy', '*_prec.npy', '*_rec.npy', and , '*_f_m.npy'. 
+    :param verbosity: Verbosity of showing attributes of scores. 
+    """
 
-    if show_only_num == True:
-        precision_label = ""
-        recall_label = ""
-        f_measure_label = ""
-        accuracy_label = ""
+    precision_label = ""
+    recall_label = ""
+    f_measure_label = ""
+    accuracy_label = ""
+
+    if verbosity:
+        precision_label = "Precision\t"
+        recall_label = "Recall\t"
+        f_measure_label = "F_measure\t"
+        accuracy_label = "Accuracy\t"
 
     cms = np.array([np.load(fn) for fn in sorted(glob.glob(os.path.join(dirpath, "*_cm.npy")))])
     precs = np.array([np.load(fn) for fn in sorted(glob.glob(os.path.join(dirpath, "*_prec.npy")))])
@@ -55,8 +64,8 @@ def macro_micro_scores(dirpath, show_only_num=False):
     print "total cm: "
     print cms.sum(axis=0)
 
-    if not show_only_num:
-        print "macro averaged scores in videowise: "
+    if verbosity:
+        print "Averaged scores for classes: "
     macro_precs = precs.mean(axis=0) * 100.0
     macro_recs = recs.mean(axis=0) * 100.0
     macro_f_ms = f_ms.mean(axis=0) * 100.0
@@ -68,8 +77,8 @@ def macro_micro_scores(dirpath, show_only_num=False):
     print macro_recs_str
     print macro_f_ms_str
 
-    if not show_only_num:
-        print "macro averaged scores in video-classwise: "
+    if verbosity:
+        print "Scores averaged over classes: "
     classwise_macro_prec = macro_precs.mean(axis=0)
     classwise_macro_rec = macro_recs.mean(axis=0)
     classwise_macro_f_m = macro_f_ms.mean(axis=0)
@@ -80,21 +89,22 @@ def macro_micro_scores(dirpath, show_only_num=False):
     print f_measure_label + "%.1f" % classwise_macro_f_m
     print accuracy_label + "%.1f" % accuracy
 
-    # if not show_only_num:
-    #     print "micro averaged scores in videowise: "
-    # micro_precs, micro_recs, micro_f_ms = calculate_scores(cms.sum(axis=0), show_result=False)
-    # micro_precs = micro_precs * 100.0
-    # micro_recs = micro_recs * 100.0
-    # micro_f_ms = micro_f_ms * 100.0
-    # micro_precs_str = precision_label + "\t".join(["%.1f"%val for val in micro_precs])
-    # micro_recs_str = recall_label + "\t".join(["%.1f"%val for val in micro_recs])
-    # micro_f_ms_str = f_measure_label + "\t".join(["%.1f"%val for val in micro_f_ms])
-
-    # print micro_precs_str
-    # print micro_recs_str
-    # print micro_f_ms_str
-
 def score_saver(output_dir, y_pred, y_true, identifier="evaldata", skipcase=True, verbosity=True):
+    """Save scores of precision, recall, F-measure calculated by prediction results and ground truth. 
+
+    :param output_dir: Directory for outputting scores: 
+
+        - <output_dir>/<identifier>_cm.npy: confusion matrix
+        - <output_dir>/<identifier>_prec.npy: precision
+        - <output_dir>/<identifier>_rec.npy: recall
+        - <output_dir>/<identifier>_f_m.npy: F-measure
+
+    :param y_pred: Result of prediction. 
+    :param y_true: Ground truth corresponding to the y_pred. 
+    :param identifier: Identifier of output file name. 
+    :param skipcase: Flag to skip the calculation and saving when the output scores are already existing. 
+    :pamar verbosity: Verbosity of showing status(except skipcase info). 
+    """
 
     cm_fn = os.path.join(output_dir, "%s_cm.npy" % identifier)
     prec_fn = os.path.join(output_dir, "%s_prec.npy" % identifier)

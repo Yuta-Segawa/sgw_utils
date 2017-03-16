@@ -185,12 +185,22 @@ def get_gabor_features_from_folder_in_patchscale(folder, patch_size=32, extensio
 
     return np.float32(features)
 
-def gabor_features_in_patchscale(folder, working_folder, 
-    patch_size=32, extension="jpg", max_threads=1, 
-    file="gabor_features_for_evaluations.npy"):
+def gabor_features_in_patchscale(input_floder, working_folder, 
+    patch_size=32, extension="jpg", file="gabor_features_for_evaluations.npy", max_threads=1):
+    """Calcluate Gabor features on patches cropped from images along scan line. 
+
+    :param input_folder: Path to folder over sub directories containing images. 
+    :param working_folder: Path to folder where the model parameters are saved in. 
+    :param patch_size: Size of patch width and height, which is used for cropping patches from images. 
+    :param extension: Suffix of images. 
+    :param file: Filename of features. This is used when saving. 
+    :param max_threads: Max threads for multiprocessing. 
+    :return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). 
+    """
+
 
     # Get subdirectories
-    folders = sorted(glob.glob(folder + "/*"))
+    folders = sorted(glob.glob(input_floder + "/*"))
 
     print "Found %d classes. " % len(folders)
     features = [get_gabor_features_from_folder_in_patchscale(f, extension=extension, patch_size=patch_size, max_threads=max_threads) 
@@ -207,14 +217,23 @@ def load_gabor_features(file = "gabor_features.npy"):
 	features = np.load( file )
 	return features
 # For training: find directories of 2 classes and calculate features in whole image region
-def gabor_features(folder, working_folder, extension="jpg", file="gabor_features.npy", max_threads=1):
+def gabor_features(input_folder, working_folder, extension="jpg", file="gabor_features.npy", max_threads=1):
+    """Calcluate Gabor features on images. 
+
+    :param input_folder: Path to folder over sub directories containing images. 
+    :param working_folder: Path to folder where the model parameters are saved in. 
+    :param extension: Suffix of images. 
+    :param file: Filename of features. This is used when saving. 
+    :param max_threads: Max threads for multiprocessing. 
+    :return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). 
+    """
 
     # Get subdirectories
-    folders = sorted(glob.glob(folder + "/*"))
+    folders = sorted(glob.glob(input_folder + "/*"))
     print folders
 
     fmt = 'Images in {} will be labeled as {}. '
-    for folder, label in zip(folders, range(0, len(folders))):
+    for label, folder in enumerate(folders):
         print fmt.format(folder, label)
 
     print "Found %d class. " % len(folders)

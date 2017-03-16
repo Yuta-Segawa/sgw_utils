@@ -91,7 +91,17 @@ def fisher_vector(samples, means, covs, w):
 	fv = normalize(fv)
 	return fv
 
-def generate_gmm(input_folder, working_folder, N, dense_steps=30, extension="jpg"):
+def generate_gmm(input_folder, working_folder, N=5, dense_steps=30, extension="jpg"):
+	"""Fit a GMM(Gaussian mixture model) from dense SIFT descriptors and save its parameters. 
+
+	:param input_folder: Path to folder containing images. 
+	:param working_folder: Path to folder where the model parameters are saved in. 
+	:param N: Mixed number of the model. 
+	:param dense_steps: Dense steps of keypoints to be used for SIFT feature extraction. 
+	:param extension: Suffix of images. 
+	:return: GMM parameters which are means, covariances, and mixture weights. 
+	"""
+
 	words = np.concatenate([folder_descriptors(folder, dense_steps, extension) for folder in glob.glob(input_folder + '/*')])
 	print("Training GMM of size", N)
 	means, covs, weights = dictionary(words, N)
@@ -114,14 +124,24 @@ def get_fisher_vectors_from_folder(folder, gmm, dense_steps = 30, extension="jpg
 	files = glob.glob(folder + "/*.%s"%extension)
 	return np.float32([fisher_vector(image_descriptors(file, dense_steps), *gmm) for file in files])
 
-def fisher_features(folder, working_folder, gmm, dense_steps = 30, extension="jpg", file="fisher_features.npy"):
-	folders = sorted(glob.glob(folder + "/*"))
+def fisher_features(input_folder, working_folder, gmm, dense_steps = 30, extension="jpg", file="fisher_features.npy"):
+	"""Calcluate fisher features on images with GMM parameters estimated in advance. 
+
+	:param input_folder: Path to folder containing images. 
+	:param working_folder: Path to folder where the model parameters are saved in. 
+	:param gmm: GMM model as a parameter tuple of (means, covariances, mixture weights). 
+	:param dense_steps: Dense steps of keypoints to be used for SIFT feature extraction. 
+	:param extension: Suffix of images. 
+	:param file: Filename of features. This is used when saving. 
+	:return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). 
+	"""
+	folders = sorted(glob.glob(input_folder + "/*"))
 	features = np.float32([get_fisher_vectors_from_folder(f, gmm, dense_steps, extension=extension) for f in folders])
 
 	if working_folder:
 		fmt = 'Images in {} labeled as {}. '
-		for folder, label in zip(folders, range(0, len(folders))):
-			print fmt.format(folder, label)
+		for input_folder, label in zip(folders, range(0, len(folders))):
+			print fmt.format(input_folder, label)
 
 		np.save(os.path.join(working_folder, file), features)
 
