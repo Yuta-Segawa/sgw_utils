@@ -1,51 +1,155 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sgw_utils.evaluation.scores &#8212; sgw_utils  documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sgw_utils.evaluation.scores &mdash; sgw_utils  documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="sgw_utils  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sgw_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sgw_utils.html">sgw_utils package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgw_utils</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>sgw_utils.evaluation.scores</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for sgw_utils.evaluation.scores</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">argparse</span>
@@ -54,6 +158,12 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
 
 <div class="viewcode-block" id="calculate_scores"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.calculate_scores">[docs]</a><span class="k">def</span> <span class="nf">calculate_scores</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate precision, recall, and F-measure from confusion matrix. </span>
+
+<span class="sd">    :param cm: Confusion matrix of ground truth and predictions. </span>
+<span class="sd">    :param verbosity: Verbosity of showing status. </span>
+<span class="sd">    :return: Tuple of precision, recall, and F-measure as numpy arrays. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">true_positives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cm</span><span class="p">))</span>
     <span class="n">false_positives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">true_positives</span><span class="p">)</span>
     <span class="n">false_negatives</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">true_positives</span><span class="p">)</span>
@@ -76,20 +186,23 @@
             <span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;F-measure&quot;</span><span class="p">,</span> <span class="n">f_m</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Precision</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Recall</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_measure</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="macro_micro_scores"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.macro_micro_scores">[docs]</a><span class="k">def</span> <span class="nf">macro_micro_scores</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">show_only_num</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="c1"># input arguments: </span>
-    <span class="c1">## dirpath: Path to directory including cm, prec, rec, f_m.npy files for entire videos. </span>
+<div class="viewcode-block" id="display_scores"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.display_scores">[docs]</a><span class="k">def</span> <span class="nf">display_scores</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display summarized scores. </span>
 
-    <span class="n">precision_label</span> <span class="o">=</span> <span class="s2">&quot;Precision</span><span class="se">\t</span><span class="s2">&quot;</span>
-    <span class="n">recall_label</span> <span class="o">=</span> <span class="s2">&quot;Recall</span><span class="se">\t</span><span class="s2">&quot;</span>
-    <span class="n">f_measure_label</span> <span class="o">=</span> <span class="s2">&quot;F_measure</span><span class="se">\t</span><span class="s2">&quot;</span>
-    <span class="n">accuracy_label</span> <span class="o">=</span> <span class="s2">&quot;Accuracy</span><span class="se">\t</span><span class="s2">&quot;</span>
+<span class="sd">    :param dirpath: Directory containing score files named as &#39;*_cm.npy&#39;, &#39;*_prec.npy&#39;, &#39;*_rec.npy&#39;, and , &#39;*_f_m.npy&#39;. </span>
+<span class="sd">    :param verbosity: Verbosity of showing attributes of scores. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">show_only_num</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">precision_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">recall_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">f_measure_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">accuracy_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">precision_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">recall_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">f_measure_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">accuracy_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+        <span class="n">precision_label</span> <span class="o">=</span> <span class="s2">&quot;Precision</span><span class="se">\t</span><span class="s2">&quot;</span>
+        <span class="n">recall_label</span> <span class="o">=</span> <span class="s2">&quot;Recall</span><span class="se">\t</span><span class="s2">&quot;</span>
+        <span class="n">f_measure_label</span> <span class="o">=</span> <span class="s2">&quot;F_measure</span><span class="se">\t</span><span class="s2">&quot;</span>
+        <span class="n">accuracy_label</span> <span class="o">=</span> <span class="s2">&quot;Accuracy</span><span class="se">\t</span><span class="s2">&quot;</span>
 
     <span class="n">cms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;*_cm.npy&quot;</span><span class="p">)))])</span>
     <span class="n">precs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="s2">&quot;*_prec.npy&quot;</span><span class="p">)))])</span>
@@ -105,8 +218,8 @@
     <span class="nb">print</span> <span class="s2">&quot;total cm: &quot;</span>
     <span class="nb">print</span> <span class="n">cms</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">show_only_num</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="s2">&quot;macro averaged scores in videowise: &quot;</span>
+    <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;Averaged scores for classes: &quot;</span>
     <span class="n">macro_precs</span> <span class="o">=</span> <span class="n">precs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
     <span class="n">macro_recs</span> <span class="o">=</span> <span class="n">recs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
     <span class="n">macro_f_ms</span> <span class="o">=</span> <span class="n">f_ms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
@@ -118,8 +231,8 @@
     <span class="nb">print</span> <span class="n">macro_recs_str</span>
     <span class="nb">print</span> <span class="n">macro_f_ms_str</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">show_only_num</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="s2">&quot;macro averaged scores in video-classwise: &quot;</span>
+    <span class="k">if</span> <span class="n">verbosity</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;Scores averaged over classes: &quot;</span>
     <span class="n">classwise_macro_prec</span> <span class="o">=</span> <span class="n">macro_precs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">classwise_macro_rec</span> <span class="o">=</span> <span class="n">macro_recs</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">classwise_macro_f_m</span> <span class="o">=</span> <span class="n">macro_f_ms</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -130,21 +243,22 @@
     <span class="nb">print</span> <span class="n">f_measure_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">classwise_macro_f_m</span>
     <span class="nb">print</span> <span class="n">accuracy_label</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">accuracy</span></div>
 
-    <span class="c1"># if not show_only_num:</span>
-    <span class="c1">#     print &quot;micro averaged scores in videowise: &quot;</span>
-    <span class="c1"># micro_precs, micro_recs, micro_f_ms = calculate_scores(cms.sum(axis=0), show_result=False)</span>
-    <span class="c1"># micro_precs = micro_precs * 100.0</span>
-    <span class="c1"># micro_recs = micro_recs * 100.0</span>
-    <span class="c1"># micro_f_ms = micro_f_ms * 100.0</span>
-    <span class="c1"># micro_precs_str = precision_label + &quot;\t&quot;.join([&quot;%.1f&quot;%val for val in micro_precs])</span>
-    <span class="c1"># micro_recs_str = recall_label + &quot;\t&quot;.join([&quot;%.1f&quot;%val for val in micro_recs])</span>
-    <span class="c1"># micro_f_ms_str = f_measure_label + &quot;\t&quot;.join([&quot;%.1f&quot;%val for val in micro_f_ms])</span>
-
-    <span class="c1"># print micro_precs_str</span>
-    <span class="c1"># print micro_recs_str</span>
-    <span class="c1"># print micro_f_ms_str</span>
-
 <div class="viewcode-block" id="score_saver"><a class="viewcode-back" href="../../../sgw_utils.evaluation.html#sgw_utils.evaluation.scores.score_saver">[docs]</a><span class="k">def</span> <span class="nf">score_saver</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;evaldata&quot;</span><span class="p">,</span> <span class="n">skipcase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Save scores of precision, recall, F-measure calculated by prediction results and ground truth. </span>
+
+<span class="sd">    :param output_dir: Directory for outputting scores: </span>
+
+<span class="sd">        - &lt;output_dir&gt;/&lt;identifier&gt;_cm.npy: confusion matrix</span>
+<span class="sd">        - &lt;output_dir&gt;/&lt;identifier&gt;_prec.npy: precision</span>
+<span class="sd">        - &lt;output_dir&gt;/&lt;identifier&gt;_rec.npy: recall</span>
+<span class="sd">        - &lt;output_dir&gt;/&lt;identifier&gt;_f_m.npy: F-measure</span>
+
+<span class="sd">    :param y_pred: Result of prediction. </span>
+<span class="sd">    :param y_true: Ground truth corresponding to the y_pred. </span>
+<span class="sd">    :param identifier: Identifier of output file name. </span>
+<span class="sd">    :param skipcase: Flag to skip the calculation and saving when the output scores are already existing. </span>
+<span class="sd">    :pamar verbosity: Verbosity of showing status(except skipcase info). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">cm_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_cm.npy&quot;</span> <span class="o">%</span> <span class="n">identifier</span><span class="p">)</span>
     <span class="n">prec_fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_prec.npy&quot;</span> <span class="o">%</span> <span class="n">identifier</span><span class="p">)</span>
@@ -203,41 +317,66 @@
 
 </pre></div>
 
+           </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

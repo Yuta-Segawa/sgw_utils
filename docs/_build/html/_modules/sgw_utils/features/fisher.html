@@ -1,51 +1,155 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sgw_utils.features.fisher &#8212; sgw_utils  documentation</title>
-    
-    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
-  </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sgw_utils.features.fisher &mdash; sgw_utils  documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="sgw_utils  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sgw_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sgw_utils.html">sgw_utils package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgw_utils</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>sgw_utils.features.fisher</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <h1>Source code for sgw_utils.features.fisher</h1><div class="highlight"><pre>
 <span></span><span class="c1">#Author: Jacob Gildenblat, 2014</span>
@@ -141,7 +245,17 @@
 	<span class="n">fv</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">fv</span></div>
 
-<div class="viewcode-block" id="generate_gmm"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.generate_gmm">[docs]</a><span class="k">def</span> <span class="nf">generate_gmm</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">dense_steps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_gmm"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.generate_gmm">[docs]</a><span class="k">def</span> <span class="nf">generate_gmm</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dense_steps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Fit a GMM(Gaussian mixture model) from dense SIFT descriptors and save its parameters. </span>
+
+<span class="sd">	:param input_folder: Path to folder containing images. </span>
+<span class="sd">	:param working_folder: Path to folder where the model parameters are saved in. </span>
+<span class="sd">	:param N: Mixed number of the model. </span>
+<span class="sd">	:param dense_steps: Dense steps of keypoints to be used for SIFT feature extraction. </span>
+<span class="sd">	:param extension: Suffix of images. </span>
+<span class="sd">	:return: GMM parameters which are means, covariances, and mixture weights. </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+
 	<span class="n">words</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">folder_descriptors</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span> <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/*&#39;</span><span class="p">)])</span>
 	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training GMM of size&quot;</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
 	<span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">dictionary</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
@@ -164,14 +278,24 @@
 	<span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">extension</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">fisher_vector</span><span class="p">(</span><span class="n">image_descriptors</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">),</span> <span class="o">*</span><span class="n">gmm</span><span class="p">)</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="fisher_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_features">[docs]</a><span class="k">def</span> <span class="nf">fisher_features</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;fisher_features.npy&quot;</span><span class="p">):</span>
-	<span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span>
+<div class="viewcode-block" id="fisher_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_features">[docs]</a><span class="k">def</span> <span class="nf">fisher_features</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;fisher_features.npy&quot;</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;Calcluate fisher features on images with GMM parameters estimated in advance. </span>
+
+<span class="sd">	:param input_folder: Path to folder containing images. </span>
+<span class="sd">	:param working_folder: Path to folder where the model parameters are saved in. </span>
+<span class="sd">	:param gmm: GMM model as a parameter tuple of (means, covariances, mixture weights). </span>
+<span class="sd">	:param dense_steps: Dense steps of keypoints to be used for SIFT feature extraction. </span>
+<span class="sd">	:param extension: Suffix of images. </span>
+<span class="sd">	:param file: Filename of features. This is used when saving. </span>
+<span class="sd">	:return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). </span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span>
 	<span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">get_fisher_vectors_from_folder</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">])</span>
 
 	<span class="k">if</span> <span class="n">working_folder</span><span class="p">:</span>
 		<span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;Images in </span><span class="si">{}</span><span class="s1"> labeled as </span><span class="si">{}</span><span class="s1">. &#39;</span>
-		<span class="k">for</span> <span class="n">folder</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">))):</span>
-			<span class="nb">print</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">input_folder</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">))):</span>
+			<span class="nb">print</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
 
 		<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
 
@@ -202,41 +326,66 @@
 	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Success rate is&quot;</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span>
 </pre></div>
 
+           </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="../../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">sgw_utils  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

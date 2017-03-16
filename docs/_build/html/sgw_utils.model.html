@@ -1,55 +1,175 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sgw_utils.model package &#8212; sgw_utils  documentation</title>
-    
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="sgw_utils.io package" href="sgw_utils.io.html" /> 
-  </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="sgw_utils.io.html" title="sgw_utils.io package"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">sgw_utils  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="sgw_utils.html" accesskey="U">sgw_utils package</a> &#187;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sgw_utils.model package &mdash; sgw_utils  documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="sgw_utils  documentation" href="index.html"/>
+        <link rel="up" title="sgw_utils package" href="sgw_utils.html"/>
+        <link rel="prev" title="sgw_utils.io package" href="sgw_utils.io.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sgw_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sgw_utils.html">sgw_utils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sgw_utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.evaluation.html">sgw_utils.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.features.html">sgw_utils.features package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.io.html">sgw_utils.io package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgw_utils.model package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.model.cnn">sgw_utils.model.cnn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.model.nn">sgw_utils.model.nn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.model.svm">sgw_utils.model.svm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.model">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgw_utils.html#module-sgw_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sgw_utils</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="sgw_utils.html">sgw_utils package</a> &raquo;</li>
+        
+      <li>sgw_utils.model package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sgw_utils.model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="sgw-utils-model-package">
 <h1>sgw_utils.model package<a class="headerlink" href="#sgw-utils-model-package" title="Permalink to this headline">¶</a></h1>
@@ -61,7 +181,30 @@
 <dl class="function">
 <dt id="sgw_utils.model.cnn.load_distributed_model">
 <code class="descclassname">sgw_utils.model.cnn.</code><code class="descname">load_distributed_model</code><span class="sig-paren">(</span><em>type='inception'</em>, <em>weights='imagenet'</em>, <em>bottom='full'</em>, <em>include_top=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/model/cnn.html#load_distributed_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.model.cnn.load_distributed_model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Load distributed CNN model such as GoogLeNet-v3 and VGG16 with arbitary depth of the model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> &#8211; Any model types of &#8216;inception&#8217;(GoogLeNet-v3) and &#8216;vgg&#8217;(VGG16).</li>
+<li><strong>weights</strong> &#8211; Any model weights of &#8216;imagenet&#8217;(pre-trained) and None(non-pre-trained).</li>
+<li><strong>bottom</strong> &#8211; <p>Name of the bottom layer which a returned model will have.</p>
+<ul>
+<li>If you don&#8217;t know layer name, check distributed model summary on Keras platform by using summary() method.</li>
+<li>bettom == &#8216;full&#8217; means any layer will be cut off from the model.</li>
+</ul>
+</li>
+<li><strong>include_top</strong> &#8211; Flag to include the regression section in the model like &#8216;global average pooling&#8217; and &#8216;dense&#8217; layers.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Keras model.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="module-sgw_utils.model.nn">
@@ -69,7 +212,8 @@
 <dl class="class">
 <dt id="sgw_utils.model.nn.NN">
 <em class="property">class </em><code class="descclassname">sgw_utils.model.nn.</code><code class="descname">NN</code><span class="sig-paren">(</span><em>n_neighbors=1</em>, <em>algorithm='ball_tree'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/model/nn.html#NN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.model.nn.NN" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Wrapper on sk-learn based NearestNeighbor model.</p>
+<dl class="method">
 <dt id="sgw_utils.model.nn.NN.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/model/nn.html#NN.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.model.nn.NN.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -102,7 +246,8 @@
 <dl class="class">
 <dt id="sgw_utils.model.svm.SVM">
 <em class="property">class </em><code class="descclassname">sgw_utils.model.svm.</code><code class="descname">SVM</code><span class="sig-paren">(</span><em>kernel_type='linear'</em>, <em>tol=0.001</em>, <em>max_iter=10000</em>, <em>grid_search=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/model/svm.html#SVM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.model.svm.SVM" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Wrapper on sk-learn based NearestNeighbor model.</p>
+<dl class="method">
 <dt id="sgw_utils.model.svm.SVM.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/model/svm.html#SVM.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.model.svm.SVM.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -136,66 +281,73 @@
 </div>
 
 
+           </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">sgw_utils.model package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-sgw_utils.model.cnn">sgw_utils.model.cnn module</a></li>
-<li><a class="reference internal" href="#module-sgw_utils.model.nn">sgw_utils.model.nn module</a></li>
-<li><a class="reference internal" href="#module-sgw_utils.model.svm">sgw_utils.model.svm module</a></li>
-<li><a class="reference internal" href="#module-sgw_utils.model">Module contents</a></li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="sgw_utils.io.html" class="btn btn-neutral" title="sgw_utils.io package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="sgw_utils.io.html"
-                        title="previous chapter">sgw_utils.io package</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/sgw_utils.model.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="sgw_utils.io.html" title="sgw_utils.io package"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">sgw_utils  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="sgw_utils.html" >sgw_utils package</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Author.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>
