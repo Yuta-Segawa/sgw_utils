@@ -213,25 +213,24 @@ by making a comment-out for exceptions on the input dimensionality.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>dirpath</strong> &#8211; Base directory containing sub-directories.</li>
 <li><strong>target_size</strong> &#8211; Shape for resizing images. None works as keep the original shape.</li>
-<li><strong>class</strong> &#8211; List of the sub-directories&#8217; naems arranged in order of class labels.</li>
+<li><strong>class</strong> &#8211; List of the sub-directories&#8217; naems arranged in order of class labels. None works as to load images from &#8216;dirpath&#8217; directory (ingore any sub-directories).</li>
+<li><strong>batch_size</strong> &#8211; Batch size when feeding from generator.</li>
+<li><strong>preprocessing_type</strong> &#8211; Preprocessing type of images. See the documentation of &#8216;image&#8217; module for the details.</li>
+<li><strong>shuffle</strong> &#8211; Flag to shuffle set of image and label before constructing a generator.</li>
+<li><strong>save_image_prefix</strong> &#8211; See &#8216;Image Preprocessing&#8217; documentation in Keras because of Keras-based implementation.</li>
+<li><strong>class_separation</strong> &#8211; Flag to separate generators into classes. This flag is usually used in except training phase. Consequently, returned objects are arranged as list of generators for each class.</li>
+<li><strong>validation_include</strong> &#8211; Flag to load images from subdirectories under each of &#8216;train&#8217; and &#8216;validation&#8217; directories. This flag is usually used only in training phase.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retrun:</th><td class="field-body"><p class="first last">Generato object based on Keras.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>None works as to load images from &#8216;dirpath&#8217; directory (ingore any sub-directories). 
-:param batch_size: Batch size when feeding from generator. 
-:param preprocessing_type: Preprocessing type of images. See the documentation of &#8216;image&#8217; module for the details.
-:param shuffle: Flag to shuffle set of image and label before constructing a generator. 
-:param save_image_prefix: See &#8216;Image Preprocessing&#8217; documentation in Keras because of Keras-based implementation. 
-:param class_separation: Flag to separate generators into classes. This flag is usually used in except training phase. 
-Consequently, returned objects are arranged as list of generators for each class. 
-:param validation_include: Flag to load images from subdirectories under each of &#8216;train&#8217; and &#8216;validation&#8217; directories. 
-This flag is usually used only in training phase. 
-:retrun: Generato object based on Keras.</p>
 </dd></dl>
 
 </div>
