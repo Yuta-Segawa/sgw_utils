@@ -1,0 +1,523 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sgw_utils.features package &mdash; sgw_utils  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="sgw_utils  documentation" href="index.html"/>
+        <link rel="up" title="sgw_utils package" href="sgw_utils.html"/>
+        <link rel="next" title="sgw_utils.io package" href="sgw_utils.io.html"/>
+        <link rel="prev" title="sgw_utils.evaluation package" href="sgw_utils.evaluation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sgw_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sgw_utils.html">sgw_utils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sgw_utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.evaluation.html">sgw_utils.evaluation package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgw_utils.features package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.features.dsift_extractor">sgw_utils.features.dsift_extractor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.features.fisher">sgw_utils.features.fisher module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.features.gabor">sgw_utils.features.gabor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.features">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.io.html">sgw_utils.io package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.model.html">sgw_utils.model package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgw_utils.html#module-sgw_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sgw_utils</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="sgw_utils.html">sgw_utils package</a> &raquo;</li>
+        
+      <li>sgw_utils.features package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sgw_utils.features.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sgw-utils-features-package">
+<h1>sgw_utils.features package<a class="headerlink" href="#sgw-utils-features-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-sgw_utils.features.dsift_extractor">
+<span id="sgw-utils-features-dsift-extractor-module"></span><h2>sgw_utils.features.dsift_extractor module<a class="headerlink" href="#module-sgw_utils.features.dsift_extractor" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.features.dsift_extractor.denseSIFT">
+<code class="descclassname">sgw_utils.features.dsift_extractor.</code><code class="descname">denseSIFT</code><span class="sig-paren">(</span><em>img</em>, <em>steps</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/dsift_extractor.html#denseSIFT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.dsift_extractor.denseSIFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output SIFT descriptors on dense keypoints lined up in a grid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> &#8211; Source image.</li>
+<li><strong>step</strong> &#8211; Dense steps of keypoints.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Keypoints and SIFT descriptors on them.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.features.fisher">
+<span id="sgw-utils-features-fisher-module"></span><h2>sgw_utils.features.fisher module<a class="headerlink" href="#module-sgw_utils.features.fisher" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.features.fisher.dictionary">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">dictionary</code><span class="sig-paren">(</span><em>descriptors</em>, <em>N</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.dictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.fisher_features">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">fisher_features</code><span class="sig-paren">(</span><em>input_folder</em>, <em>working_folder</em>, <em>gmm</em>, <em>dense_steps=30</em>, <em>extension='jpg'</em>, <em>file='fisher_features.npy'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#fisher_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.fisher_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcluate fisher features on images with GMM parameters estimated in advance.</p>
+<p>This is usually called by feature_select_switcher.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_folder</strong> &#8211; Path to folder containing sud directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.</li>
+<li><strong>working_folder</strong> &#8211; Path to folder where the model parameters are saved in.</li>
+<li><strong>gmm</strong> &#8211; GMM model as a parameter tuple of (means, covariances, mixture weights).</li>
+<li><strong>dense_steps</strong> &#8211; Dense steps of keypoints to be used for SIFT feature extraction.</li>
+<li><strong>extension</strong> &#8211; Suffix of images.</li>
+<li><strong>file</strong> &#8211; Filename of features. This is used when saving.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.fisher_vector">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">fisher_vector</code><span class="sig-paren">(</span><em>samples</em>, <em>means</em>, <em>covs</em>, <em>w</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#fisher_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.fisher_vector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.fisher_vector_means">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">fisher_vector_means</code><span class="sig-paren">(</span><em>s0</em>, <em>s1</em>, <em>s2</em>, <em>means</em>, <em>sigma</em>, <em>w</em>, <em>T</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#fisher_vector_means"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.fisher_vector_means" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.fisher_vector_sigma">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">fisher_vector_sigma</code><span class="sig-paren">(</span><em>s0</em>, <em>s1</em>, <em>s2</em>, <em>means</em>, <em>sigma</em>, <em>w</em>, <em>T</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#fisher_vector_sigma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.fisher_vector_sigma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.fisher_vector_weights">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">fisher_vector_weights</code><span class="sig-paren">(</span><em>s0</em>, <em>s1</em>, <em>s2</em>, <em>means</em>, <em>covs</em>, <em>w</em>, <em>T</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#fisher_vector_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.fisher_vector_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.folder_descriptors">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">folder_descriptors</code><span class="sig-paren">(</span><em>folder</em>, <em>dense_steps=30</em>, <em>extension='jpg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#folder_descriptors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.folder_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.folder_descriptors_original">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">folder_descriptors_original</code><span class="sig-paren">(</span><em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#folder_descriptors_original"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.folder_descriptors_original" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.generate_gmm">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">generate_gmm</code><span class="sig-paren">(</span><em>input_folder</em>, <em>working_folder</em>, <em>N=5</em>, <em>dense_steps=30</em>, <em>extension='jpg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#generate_gmm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.generate_gmm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a GMM(Gaussian mixture model) from dense SIFT descriptors and save its parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_folder</strong> &#8211; Path to folder containing images.</li>
+<li><strong>working_folder</strong> &#8211; Path to folder where the model parameters are saved in.</li>
+<li><strong>N</strong> &#8211; Mixed number of the model.</li>
+<li><strong>dense_steps</strong> &#8211; Dense steps of keypoints to be used for SIFT feature extraction.</li>
+<li><strong>extension</strong> &#8211; Suffix of images.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">GMM parameters which are means, covariances, and mixture weights.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.get_args">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.get_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.get_fisher_vectors_from_folder">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">get_fisher_vectors_from_folder</code><span class="sig-paren">(</span><em>folder</em>, <em>gmm</em>, <em>dense_steps=30</em>, <em>extension='jpg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#get_fisher_vectors_from_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.get_fisher_vectors_from_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.get_fisher_vectors_from_folder_original">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">get_fisher_vectors_from_folder_original</code><span class="sig-paren">(</span><em>folder</em>, <em>gmm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#get_fisher_vectors_from_folder_original"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.get_fisher_vectors_from_folder_original" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.image_descriptors">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">image_descriptors</code><span class="sig-paren">(</span><em>file</em>, <em>dense_steps=30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#image_descriptors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.image_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.image_descriptors_original">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">image_descriptors_original</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#image_descriptors_original"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.image_descriptors_original" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.likelihood_moment">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">likelihood_moment</code><span class="sig-paren">(</span><em>x</em>, <em>ytk</em>, <em>moment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#likelihood_moment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.likelihood_moment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.likelihood_statistics">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">likelihood_statistics</code><span class="sig-paren">(</span><em>samples</em>, <em>means</em>, <em>covs</em>, <em>weights</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#likelihood_statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.likelihood_statistics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.load_fisher_features">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">load_fisher_features</code><span class="sig-paren">(</span><em>file='fisher_features.npy'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#load_fisher_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.load_fisher_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.load_gmm">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">load_gmm</code><span class="sig-paren">(</span><em>working_folder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#load_gmm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.load_gmm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load GMM parameters which were calculated at training time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>working_folder</strong> &#8211; Path to folder including &#8216;means.gmm&#8217;, &#8216;covs.gmm&#8217;, and &#8216;weights.gmm&#8217;.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">GMM parameters which are means, covariances, and mixture weights.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.fisher.normalize">
+<code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>fisher_vector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.normalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.features.gabor">
+<span id="sgw-utils-features-gabor-module"></span><h2>sgw_utils.features.gabor module<a class="headerlink" href="#module-sgw_utils.features.gabor" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.features.gabor.calc_texture_energy">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">calc_texture_energy</code><span class="sig-paren">(</span><em>array</em>, <em>w_size=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#calc_texture_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.calc_texture_energy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.gabor_descriptor">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">gabor_descriptor</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#gabor_descriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.gabor_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.gabor_features">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">gabor_features</code><span class="sig-paren">(</span><em>input_folder</em>, <em>working_folder</em>, <em>extension='jpg'</em>, <em>file='gabor_features.npy'</em>, <em>max_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#gabor_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.gabor_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcluate Gabor features on images.</p>
+<p>This is usually called by feature_select_switcher.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_folder</strong> &#8211; Path to folder over sub directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.</li>
+<li><strong>working_folder</strong> &#8211; Path to folder where the model parameters are saved in.</li>
+<li><strong>extension</strong> &#8211; Suffix of images.</li>
+<li><strong>file</strong> &#8211; Filename of features. This is used when saving.</li>
+<li><strong>max_threads</strong> &#8211; Max threads for multiprocessing.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.gabor_features_in_patchscale">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">gabor_features_in_patchscale</code><span class="sig-paren">(</span><em>input_floder</em>, <em>working_folder</em>, <em>patch_size=32</em>, <em>extension='jpg'</em>, <em>file='gabor_features_for_evaluations.npy'</em>, <em>max_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#gabor_features_in_patchscale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.gabor_features_in_patchscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcluate Gabor features on patches cropped from images along scan line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_folder</strong> &#8211; Path to folder over sub directories containing images.</li>
+<li><strong>working_folder</strong> &#8211; Path to folder where the model parameters are saved in.</li>
+<li><strong>patch_size</strong> &#8211; Size of patch width and height, which is used for cropping patches from images.</li>
+<li><strong>extension</strong> &#8211; Suffix of images.</li>
+<li><strong>file</strong> &#8211; Filename of features. This is used when saving.</li>
+<li><strong>max_threads</strong> &#8211; Max threads for multiprocessing.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.get_args">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">get_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#get_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.get_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.get_gabor_features_from_folder">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">get_gabor_features_from_folder</code><span class="sig-paren">(</span><em>folder</em>, <em>extension='jpg'</em>, <em>max_threads=1</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#get_gabor_features_from_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.get_gabor_features_from_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.get_gabor_features_from_folder_in_patchscale">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">get_gabor_features_from_folder_in_patchscale</code><span class="sig-paren">(</span><em>folder</em>, <em>patch_size=32</em>, <em>extension='jpg'</em>, <em>max_threads=1</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#get_gabor_features_from_folder_in_patchscale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.get_gabor_features_from_folder_in_patchscale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.load_gabor_features">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">load_gabor_features</code><span class="sig-paren">(</span><em>file='gabor_features.npy'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#load_gabor_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.load_gabor_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.normalize_with_tanh">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">normalize_with_tanh</code><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#normalize_with_tanh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.normalize_with_tanh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.features.gabor.preprocessing_on_batch">
+<code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">preprocessing_on_batch</code><span class="sig-paren">(</span><em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#preprocessing_on_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.preprocessing_on_batch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.features">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sgw_utils.features" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sgw_utils.io.html" class="btn btn-neutral float-right" title="sgw_utils.io package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sgw_utils.evaluation.html" class="btn btn-neutral" title="sgw_utils.evaluation package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

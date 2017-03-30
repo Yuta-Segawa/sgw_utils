@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sgw_utils.io.image &mdash; sgw_utils  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="sgw_utils  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sgw_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../sgw_utils.html">sgw_utils package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sgw_utils</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>sgw_utils.io.image</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sgw_utils.io.image</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">cv2</span><span class="o">,</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing</span> <span class="k">import</span> <span class="n">image</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">keras.preprocessing.image</span> <span class="k">import</span> <span class="n">ImageDataGenerator</span>
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+<span class="kn">from</span> <span class="nn">keras.applications.imagenet_utils</span> <span class="k">import</span> <span class="n">preprocess_input</span>
+<span class="kn">from</span> <span class="nn">sgw_utils.features</span> <span class="k">import</span> <span class="n">gabor</span><span class="p">,</span> <span class="n">fisher</span>
+
+<div class="viewcode-block" id="get_crop_locs"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.get_crop_locs">[docs]</a><span class="k">def</span> <span class="nf">get_crop_locs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get locations where patches are cropped in a source image. </span>
+
+<span class="sd">    :param shape: Shape of source image you suppose. </span>
+<span class="sd">    :param patch_size: The edge length of cropped patches. </span>
+<span class="sd">    :return: Cropping location as list of ((tl_y tl_x), (br_y, br_x)). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tl_x_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">patch_size</span><span class="p">)</span>
+    <span class="n">tl_y_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">patch_size</span><span class="p">)</span>
+    <span class="n">tl_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">tl_y_locs</span><span class="p">,</span> <span class="n">tl_x_locs</span><span class="p">)))</span>
+    <span class="n">br_locs</span> <span class="o">=</span> <span class="n">tl_locs</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tl_locs</span><span class="p">,</span> <span class="n">br_locs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_crop_masks"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.get_crop_masks">[docs]</a><span class="k">def</span> <span class="nf">get_crop_masks</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get masks for cropping regions in a source image. </span>
+
+<span class="sd">    :param shape: Shape of source image you suppose. </span>
+<span class="sd">    :param patch_size: The edge length of cropped patches. </span>
+<span class="sd">    :return: List of the masks of numpy array. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">locs</span> <span class="o">=</span> <span class="n">get_crop_locs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">)</span>
+    <span class="n">loc_masks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">locs</span><span class="p">:</span> 
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">loc_masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">loc_masks</span></div>
+
+<div class="viewcode-block" id="crop_imgs"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.crop_imgs">[docs]</a><span class="k">def</span> <span class="nf">crop_imgs</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Crop patches from the source image along the scan lines. </span>
+<span class="sd">    </span>
+<span class="sd">    :param img: Source image. </span>
+<span class="sd">    :param patch_size: The edge length of cropped patches. </span>
+<span class="sd">    :return: List of cropped patches. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">locs</span> <span class="o">=</span> <span class="n">get_crop_locs</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">)</span>
+    <span class="n">mirrored_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">img</span><span class="p">,</span> <span class="n">img</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">img</span><span class="p">[::,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">img</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]])])</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">mirrored_img</span><span class="p">[</span><span class="n">tl</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">br</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tl</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">br</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">tl</span><span class="p">,</span> <span class="n">br</span> <span class="ow">in</span> <span class="n">locs</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="resize_and_transpose"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.resize_and_transpose">[docs]</a><span class="k">def</span> <span class="nf">resize_and_transpose</span><span class="p">(</span><span class="n">img_fn</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">image</span><span class="o">.</span><span class="n">img_to_array</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">load_img</span><span class="p">(</span><span class="n">img_fn</span><span class="p">,</span> <span class="n">target_size</span><span class="o">=</span><span class="n">shape</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span></div>
+<div class="viewcode-block" id="mp_func"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.mp_func">[docs]</a><span class="k">def</span> <span class="nf">mp_func</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">resize_and_transpose</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="load_images_from_dirs"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.load_images_from_dirs">[docs]</a><span class="k">def</span> <span class="nf">load_images_from_dirs</span><span class="p">(</span><span class="n">basedir</span><span class="p">,</span> <span class="n">classnames</span><span class="p">,</span> 
+    <span class="n">image_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">),</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">max_smps</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vervosity</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load images from sub-directories and pre-resize them. </span>
+
+<span class="sd">    :param basedir: Base directory containing sub-directories including images to be loaded. </span>
+<span class="sd">    :param classnames: List of the sub-directories&#39; naems arranged in order of class labels.  </span>
+<span class="sd">    :param image_shape: Shape of loaded images for resizing. </span>
+<span class="sd">    :param extension: Suffix of images to be loaded. </span>
+<span class="sd">    :param max_smps: Limitation of images to be loaded. Default of &#39;-1&#39; means the entire images will be loaded.  </span>
+<span class="sd">    :param max_threads: Max threads for multiprocessing. Default of &#39;1&#39; means the multiprocessing will be disable. </span>
+<span class="sd">    :param bool vervosity: Vervosity on displaying status. </span>
+<span class="sd">    :return: Loaded and resized images as list of numpy array in shape of (samples_num, image_shape[0], image_shape[1]). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get filenames from directories of the classes</span>
+    <span class="n">dirnames</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basedir</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classnames</span> 
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basedir</span><span class="p">,</span> <span class="bp">cls</span><span class="p">))</span> <span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">dirnames</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">classnames</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[E]Too few classes are found (expected </span><span class="si">%d</span><span class="s2"> classes, but </span><span class="si">%d</span><span class="s2">). &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classnames</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dirnames</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">img_filenames</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="s2">&quot;*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">extension</span><span class="p">)))</span> 
+                    <span class="k">for</span> <span class="n">dirname</span> <span class="ow">in</span> <span class="n">dirnames</span> <span class="p">]</span>
+    <span class="c1"># display info</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">found_dir</span><span class="p">,</span> <span class="n">fns</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dirnames</span><span class="p">,</span> <span class="n">img_filenames</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Found </span><span class="si">%d</span><span class="s2"> images in </span><span class="si">%s</span><span class="s2">. labeled them as </span><span class="si">%d</span><span class="s2">. &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fns</span><span class="p">),</span> <span class="n">found_dir</span><span class="p">,</span> <span class="n">idx</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">max_smps</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> 
+            <span class="n">max_smps</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fns</span><span class="p">),</span> <span class="n">max_smps</span><span class="p">)</span> 
+
+    <span class="c1"># load all images</span>
+    <span class="n">mp_status</span> <span class="o">=</span> <span class="s1">&#39;enabled with </span><span class="si">%d</span><span class="s1"> threads&#39;</span> <span class="o">%</span> <span class="n">max_threads</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">max_threads</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;disable&#39;</span>
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Resize with shape </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">image_shape</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]( Multi-Processing: </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">mp_status</span><span class="p">)</span>
+
+    <span class="n">loaded_imgs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cls_img_fns</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">max_smps</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">cls_img_fns</span><span class="p">)</span>
+            <span class="n">cls_img_fns</span> <span class="o">=</span> <span class="n">cls_img_fns</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_smps</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Resizing </span><span class="si">%d</span><span class="s2"> images belonging to the class </span><span class="si">%d</span><span class="s2">. &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cls_img_fns</span><span class="p">),</span> <span class="n">i</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">max_threads</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">max_threads</span><span class="p">)</span>
+            <span class="n">loaded_imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">mp_func</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cls_img_fns</span><span class="p">,</span> <span class="p">[</span><span class="n">image_shape</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cls_img_fns</span><span class="p">))),</span> <span class="nb">float</span><span class="p">))</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">loaded_imgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mp_func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cls_img_fns</span><span class="p">,</span> <span class="p">[</span><span class="n">image_shape</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cls_img_fns</span><span class="p">))],</span> <span class="nb">float</span><span class="p">))</span>
+
+    <span class="c1"># make one-hot vectors as training labels</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">imgs</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">imgs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">)</span> <span class="p">]</span>
+    <span class="k">if</span> <span class="n">max_smps</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_smps</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">labels</span> <span class="p">]</span>
+    <span class="n">one_hot_vectors</span> <span class="o">=</span> <span class="p">[</span>  <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">class_label</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)))</span> <span class="k">for</span> <span class="n">class_label</span> <span class="ow">in</span> <span class="n">labels</span> <span class="p">]</span>
+    <span class="k">for</span> <span class="n">class_label</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">one_hot_vectors</span><span class="p">):</span>
+        <span class="n">v</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)),</span> <span class="n">class_label</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Loaded all images and labels. &quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">loaded_imgs</span><span class="p">,</span> <span class="n">one_hot_vectors</span></div>
+
+<span class="c1"># for prediction</span>
+<div class="viewcode-block" id="load_images_in_dir"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.load_images_in_dir">[docs]</a><span class="k">def</span> <span class="nf">load_images_in_dir</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> 
+    <span class="n">image_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">),</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">max_smps</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vervosity</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load images from a single directory and pre-resize them. </span>
+
+<span class="sd">    :param dirname: Directory including images to be loaded. </span>
+<span class="sd">    :param image_shape: Shape of loaded images for resizing. </span>
+<span class="sd">    :param extension: Suffix of images to be loaded. </span>
+<span class="sd">    :param max_smps: Limitation of images to be loaded. Default of &#39;-1&#39; means the entire images will be loaded.  </span>
+<span class="sd">    :param max_threads: Max threads for multiprocessing. Default of &#39;1&#39; means the multiprocessing will be disable. </span>
+<span class="sd">    :param bool vervosity: Vervosity on displaying status. </span>
+<span class="sd">    :return: Loaded and resized images as numpy array in shape of (classes_num, samples_num, image_shape[0], image_shape[1]). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get filenames from directories of the classes</span>
+    <span class="n">img_filenames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="s2">&quot;*.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">extension</span><span class="p">)))</span>
+
+    <span class="c1"># display info</span>
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Found </span><span class="si">%d</span><span class="s2"> images in </span><span class="si">%s</span><span class="s2">. &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">),</span> <span class="n">dirname</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">max_smps</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> 
+        <span class="n">max_smps</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">),</span> <span class="n">max_smps</span><span class="p">)</span> 
+
+    <span class="n">loaded_imgs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">max_smps</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">)</span>
+        <span class="n">img_filenames</span> <span class="o">=</span> <span class="n">img_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_smps</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Use </span><span class="si">%d</span><span class="s2"> images. &quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">))</span>
+
+    <span class="c1"># load all images</span>
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">image_shape</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Not any resizing. &quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Resizing with shape </span><span class="si">%s</span><span class="s2">...&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">image_shape</span><span class="p">))</span>
+    <span class="n">mp_status</span> <span class="o">=</span> <span class="s1">&#39;enabled with </span><span class="si">%d</span><span class="s1"> threads&#39;</span> <span class="o">%</span> <span class="n">max_threads</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">max_threads</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;disable&#39;</span>
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]( Multi-Processing: </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">mp_status</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="n">max_threads</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">max_threads</span><span class="p">)</span>
+        <span class="n">loaded_imgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">mp_func</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">,</span> <span class="p">[</span><span class="n">image_shape</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">))))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">loaded_imgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mp_func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">,</span> <span class="p">[</span><span class="n">image_shape</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">img_filenames</span><span class="p">))])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">loaded_imgs</span></div>
+
+<div class="viewcode-block" id="preprocess_on_images"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.preprocess_on_images">[docs]</a><span class="k">def</span> <span class="nf">preprocess_on_images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;inception&#39;</span><span class="p">,</span> <span class="n">vervosity</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Preprocess on the images by several types of method. </span>
+
+<span class="sd">    :param images: Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input. </span>
+<span class="sd">    :param type: Preprocessing type. You can choose from &#39;inception&#39;, &#39;vgg&#39;, and &#39;disable&#39;: </span>
+
+<span class="sd">            - inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0). </span>
+<span class="sd">            - vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras. </span>
+<span class="sd">            - disable: Not apply any methods of preprocessing. </span>
+
+<span class="sd">    :param bool vervosity: Vervosity on displaying status. </span>
+<span class="sd">    :return: Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># determinant preprocessing</span>
+    <span class="k">if</span> <span class="n">vervosity</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I]Applying preprocessing. &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[I](Preprocessing type: </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;inception&#39;</span><span class="p">:</span>
+        <span class="n">images</span> <span class="o">/=</span> <span class="mf">255.0</span>
+        <span class="n">images</span> <span class="o">-=</span> <span class="mf">0.5</span>
+        <span class="n">images</span> <span class="o">*=</span> <span class="mf">2.0</span>
+    <span class="k">elif</span> <span class="nb">type</span>  <span class="o">==</span> <span class="s1">&#39;vgg&#39;</span><span class="p">:</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">preprocess_input</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;disable&#39;</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[E]Invalid preprocessing type&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">images</span></div>
+
+<div class="viewcode-block" id="feature_select_switcher"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.feature_select_switcher">[docs]</a><span class="k">def</span> <span class="nf">feature_select_switcher</span><span class="p">(</span><span class="n">feature_keyword</span><span class="p">,</span> 
+    <span class="n">image_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">load_GMM_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper to easily determine which feature to be returned. </span>
+<span class="sd">    </span>
+<span class="sd">    :param feature_keyword: Keyword for feature data which will be returned finally: </span>
+
+<span class="sd">        - If a path to a file of features is given, this will return loaded numpy array. </span>
+<span class="sd">        - If a type of feature and image_dir are given, this will return calculated features with the type. </span>
+<span class="sd">            - Now &#39;gabor&#39; and &#39;fisher&#39; are available as feature types. </span>
+<span class="sd">        - If an unrecognized string or None is given, this will return None. </span>
+<span class="sd">    </span>
+<span class="sd">    :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. See fisher and gabor module for more detail. </span>
+<span class="sd">    :param output_dir: Output directory for calculated feature file. This will be also ignored when feature file is already existing. </span>
+<span class="sd">    :param identifier: Identifier of file name of features. This will be used as like &quot;&lt;identifier&gt;_&lt;feature_keyword&gt;_features.npy&quot;</span>
+<span class="sd">    :param extension: Suffix of images to be loaded. </span>
+<span class="sd">    :param max_threads: Max threads for multiprocessing. Default of &#39;1&#39; means the multiprocessing will be disable. </span>
+<span class="sd">    :param load_GMM_dir: (ignored except fisher feature)Directory of GMM paramterers which were calcluated at training time in advance. In general this flag should work when evaluation. </span>
+<span class="sd">    :return: Calculated or loaded features as numpy array. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">return_features</span> <span class="o">=</span> <span class="kc">None</span>
+ 
+    <span class="c1"># 1) load from file if the option has a valid path</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">feature_keyword</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s2">&quot;[I]Load from the feature file: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">feature_keyword</span>
+        <span class="n">return_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">feature_keyword</span><span class="p">)</span>
+
+    <span class="c1"># 2) obtain features by calculation or loading from an existing file</span>
+    <span class="n">available_feature_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gabor&#39;</span><span class="p">,</span> <span class="s1">&#39;fisher&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">feature_keyword</span> <span class="ow">in</span> <span class="n">available_feature_types</span><span class="p">:</span>
+        <span class="n">name_elms</span> <span class="o">=</span> <span class="p">[</span> <span class="n">elm</span> <span class="k">for</span> <span class="n">elm</span> <span class="ow">in</span> <span class="p">[</span><span class="n">identifier</span><span class="p">,</span> <span class="n">feature_keyword</span><span class="p">,</span> <span class="s2">&quot;features.npy&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">elm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">feature_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name_elms</span><span class="p">))</span>
+    
+        <span class="c1"># calculate features if the option has a valid feature type</span>
+        <span class="k">if</span> <span class="n">feature_keyword</span> <span class="o">==</span> <span class="s2">&quot;gabor&quot;</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;[I]Feature type: Gabor&quot;</span>
+            <span class="n">return_features</span> <span class="o">=</span> <span class="n">gabor</span><span class="o">.</span><span class="n">gabor_features</span><span class="p">(</span><span class="n">image_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> 
+                <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">feature_filename</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="n">max_threads</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">feature_filename</span><span class="p">)</span> <span class="k">else</span> <span class="n">gabor</span><span class="o">.</span><span class="n">load_gabor_features</span><span class="p">(</span><span class="n">feature_filename</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">feature_keyword</span> <span class="o">==</span> <span class="s1">&#39;fisher&#39;</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s2">&quot;[I]Feature type: Fisher&quot;</span>
+            <span class="n">gmm</span> <span class="o">=</span> <span class="n">fisher</span><span class="o">.</span><span class="n">generate_gmm</span><span class="p">(</span><span class="n">image_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">load_GMM_dir</span> <span class="k">else</span> <span class="n">fisher</span><span class="o">.</span><span class="n">load_gmm</span><span class="p">(</span><span class="n">load_GMM_dir</span><span class="p">)</span>
+            <span class="n">return_features</span> <span class="o">=</span> <span class="n">fisher</span><span class="o">.</span><span class="n">fisher_features</span><span class="p">(</span><span class="n">image_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> 
+                <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">feature_filename</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">feature_filename</span><span class="p">)</span> <span class="k">else</span> <span class="n">fisher</span><span class="o">.</span><span class="n">load_fisher_features</span><span class="p">(</span><span class="n">feature_filename</span><span class="p">)</span>
+
+    <span class="c1"># 3) exception</span>
+    <span class="k">if</span> <span class="n">return_features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;[E]Couldn&#39;t obtain features. &quot;</span>
+        <span class="k">raise</span> <span class="ne">IOError</span>
+
+    <span class="k">return</span> <span class="n">return_features</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

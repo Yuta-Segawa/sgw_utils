@@ -1,0 +1,635 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sgw_utils.io package &mdash; sgw_utils  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="sgw_utils  documentation" href="index.html"/>
+        <link rel="up" title="sgw_utils package" href="sgw_utils.html"/>
+        <link rel="next" title="sgw_utils.model package" href="sgw_utils.model.html"/>
+        <link rel="prev" title="sgw_utils.features package" href="sgw_utils.features.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sgw_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sgw_utils.html">sgw_utils package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sgw_utils.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.evaluation.html">sgw_utils.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.features.html">sgw_utils.features package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">sgw_utils.io package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.io.directory">sgw_utils.io.directory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.io.formatting">sgw_utils.io.formatting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.io.generator">sgw_utils.io.generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.io.image">sgw_utils.io.image module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-sgw_utils.io">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sgw_utils.model.html">sgw_utils.model package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sgw_utils.html#module-sgw_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sgw_utils</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="sgw_utils.html">sgw_utils package</a> &raquo;</li>
+        
+      <li>sgw_utils.io package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sgw_utils.io.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sgw-utils-io-package">
+<h1>sgw_utils.io package<a class="headerlink" href="#sgw-utils-io-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-sgw_utils.io.directory">
+<span id="sgw-utils-io-directory-module"></span><h2>sgw_utils.io.directory module<a class="headerlink" href="#module-sgw_utils.io.directory" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.io.directory.check_and_creator">
+<code class="descclassname">sgw_utils.io.directory.</code><code class="descname">check_and_creator</code><span class="sig-paren">(</span><em>dirpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/directory.html#check_and_creator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.directory.check_and_creator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create directory if it is not exisiting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dirpath</strong> &#8211; Directory path.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.io.formatting">
+<span id="sgw-utils-io-formatting-module"></span><h2>sgw_utils.io.formatting module<a class="headerlink" href="#module-sgw_utils.io.formatting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.io.formatting.convert_to_onehot">
+<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">convert_to_onehot</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#convert_to_onehot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.convert_to_onehot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert label array to one-hot vector by Keras function &#8216;to_categorical&#8217;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>labels</strong> &#8211; Numpy integer array representing label indices.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">One-hot labels.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.formatting.make_set_xy">
+<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">make_set_xy</code><span class="sig-paren">(</span><em>loaded_npy</em>, <em>label_type='sklearn'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#make_set_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.make_set_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arange numpy features to the format used for inputting to classifiers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>loaded_npy</strong> &#8211; Numpy features in shape of (classes_num, samples_num, dimensionality).</li>
+<li><strong>label_type</strong> &#8211; <p>Label type of platform where you will use returned set:</p>
+<ul>
+<li>sklearn: For scikit-learn platform like [0, 0, ..., 1, 1].</li>
+<li>keras: For Keras platform (one-hot representation) like [[1,0], [1,0], ..., [0,1], [0,1]].</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of (&lt;vertically stacked features&gt;, &lt;corresponding labels&gt;).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.formatting.split_into_batches">
+<code class="descclassname">sgw_utils.io.formatting.</code><code class="descname">split_into_batches</code><span class="sig-paren">(</span><em>data</em>, <em>batch_size=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/formatting.html#split_into_batches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.formatting.split_into_batches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split input data into some batches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; Target data in numpy array.</li>
+<li><strong>batch_size</strong> &#8211; Size of batches. This works based on numpy function &#8216;array_split&#8217;.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of Batches.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.io.generator">
+<span id="sgw-utils-io-generator-module"></span><h2>sgw_utils.io.generator module<a class="headerlink" href="#module-sgw_utils.io.generator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sgw_utils.io.generator.DataIterator">
+<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">DataIterator</code><span class="sig-paren">(</span><em>featurewise_center=False</em>, <em>samplewise_center=False</em>, <em>featurewise_std_normalization=False</em>, <em>samplewise_std_normalization=False</em>, <em>zca_whitening=False</em>, <em>rotation_range=0.0</em>, <em>width_shift_range=0.0</em>, <em>height_shift_range=0.0</em>, <em>shear_range=0.0</em>, <em>zoom_range=0.0</em>, <em>channel_shift_range=0.0</em>, <em>fill_mode='nearest'</em>, <em>cval=0.0</em>, <em>horizontal_flip=False</em>, <em>vertical_flip=False</em>, <em>rescale=None</em>, <em>preprocessing_function=None</em>, <em>data_format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#DataIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.DataIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.ImageDataGenerator</span></code></p>
+<p>Overloaded class on ImageDataGenerator for avoiding from any data augmentations.</p>
+<dl class="method">
+<dt id="sgw_utils.io.generator.DataIterator.random_transform">
+<code class="descname">random_transform</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#DataIterator.random_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.DataIterator.random_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sgw_utils.io.generator.ImageNetDataGenerator">
+<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">ImageNetDataGenerator</code><span class="sig-paren">(</span><em>featurewise_center=False</em>, <em>samplewise_center=False</em>, <em>featurewise_std_normalization=False</em>, <em>samplewise_std_normalization=False</em>, <em>zca_whitening=False</em>, <em>rotation_range=0.0</em>, <em>width_shift_range=0.0</em>, <em>height_shift_range=0.0</em>, <em>shear_range=0.0</em>, <em>zoom_range=0.0</em>, <em>channel_shift_range=0.0</em>, <em>fill_mode='nearest'</em>, <em>cval=0.0</em>, <em>horizontal_flip=False</em>, <em>vertical_flip=False</em>, <em>rescale=None</em>, <em>preprocessing_function=None</em>, <em>data_format=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#ImageNetDataGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.ImageNetDataGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.ImageDataGenerator</span></code></p>
+<p>Overloaded class on Keras &#8216;ImageDataGenerator&#8217;, 
+which is aiming at including preprocess for &#8216;inception&#8217; and &#8216;vgg&#8217;.</p>
+<p>self.rescale works as a kerword of preprocessing type like:</p>
+<blockquote>
+<div><ul class="simple">
+<li>In case self.rescale = &#8216;inception&#8217;, preprocess on image in the same manner as GoogLeNet.</li>
+<li>In case self.rescale = &#8216;vgg&#8217;, preprocess on image in the same manner as VGG16.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="sgw_utils.io.generator.ImageNetDataGenerator.standardize">
+<code class="descname">standardize</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#ImageNetDataGenerator.standardize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.ImageNetDataGenerator.standardize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sgw_utils.io.generator.NumpyArrayIterator_LargeChannelAdapted">
+<em class="property">class </em><code class="descclassname">sgw_utils.io.generator.</code><code class="descname">NumpyArrayIterator_LargeChannelAdapted</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>image_data_generator</em>, <em>batch_size=32</em>, <em>shuffle=False</em>, <em>seed=None</em>, <em>dim_ordering='default'</em>, <em>save_to_dir=None</em>, <em>save_prefix=''</em>, <em>save_format='jpeg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#NumpyArrayIterator_LargeChannelAdapted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.NumpyArrayIterator_LargeChannelAdapted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">keras.preprocessing.image.NumpyArrayIterator</span></code></p>
+<p>Overloaded class on NumpyArrayIterator in order to let further data input even not formatted as images.   
+by making a comment-out for exceptions on the input dimensionality.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.generator.generator_preparation">
+<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">generator_preparation</code><span class="sig-paren">(</span><em>images</em>, <em>labels</em>, <em>batch_size=100</em>, <em>preprocessing_type='inception'</em>, <em>shuffle=False</em>, <em>save_image_prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#generator_preparation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.generator_preparation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create generator from images in a single directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>images</strong> &#8211; Images to be stacked on a quene of a generator.</li>
+<li><strong>labels</strong> &#8211; <p>Corresponidng labels.</p>
+<ul>
+<li>If you use on Keras platform, you have to convert the label to one-hot format in advance.</li>
+</ul>
+</li>
+<li><strong>batch_size</strong> &#8211; Batch size when feeding from generator.</li>
+<li><strong>type</strong> &#8211; Preprocessing type of images. See the documentation of &#8216;image&#8217; module for the details.</li>
+<li><strong>shuffle</strong> &#8211; Flag to shuffle set of image and label before constructing a generator.</li>
+<li><strong>save_image_prefix</strong> &#8211; See &#8216;Image Preprocessing&#8217; documentation in Keras because of Keras-based implementation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retrun:</th><td class="field-body"><p class="first last">Generator object based on Keras.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.generator.generator_preparation_from_dirs">
+<code class="descclassname">sgw_utils.io.generator.</code><code class="descname">generator_preparation_from_dirs</code><span class="sig-paren">(</span><em>dirpath</em>, <em>target_size</em>, <em>classes=None</em>, <em>batch_size=100</em>, <em>shuffle=False</em>, <em>preprocessing_type='inception'</em>, <em>save_image_prefix=None</em>, <em>class_separation=False</em>, <em>validation_include=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/generator.html#generator_preparation_from_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.generator.generator_preparation_from_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crate generators from at least one directories including images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dirpath</strong> &#8211; Base directory containing sub-directories.</li>
+<li><strong>target_size</strong> &#8211; Shape for resizing images. None works as keep the original shape.</li>
+<li><strong>class</strong> &#8211; List of the sub-directories&#8217; naems arranged in order of class labels. None works as to load images from &#8216;dirpath&#8217; directory (ingore any sub-directories).</li>
+<li><strong>batch_size</strong> &#8211; Batch size when feeding from generator.</li>
+<li><strong>preprocessing_type</strong> &#8211; Preprocessing type of images. See the documentation of &#8216;image&#8217; module for the details.</li>
+<li><strong>shuffle</strong> &#8211; Flag to shuffle set of image and label before constructing a generator.</li>
+<li><strong>save_image_prefix</strong> &#8211; See &#8216;Image Preprocessing&#8217; documentation in Keras because of Keras-based implementation.</li>
+<li><strong>class_separation</strong> &#8211; Flag to separate generators into classes. This flag is usually used in except training phase. Consequently, returned objects are arranged as list of generators for each class.</li>
+<li><strong>validation_include</strong> &#8211; Flag to load images from subdirectories under each of &#8216;train&#8217; and &#8216;validation&#8217; directories. This flag is usually used only in training phase.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retrun:</th><td class="field-body"><p class="first last">Generato object based on Keras.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.io.image">
+<span id="sgw-utils-io-image-module"></span><h2>sgw_utils.io.image module<a class="headerlink" href="#module-sgw_utils.io.image" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="sgw_utils.io.image.crop_imgs">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">crop_imgs</code><span class="sig-paren">(</span><em>img</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#crop_imgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.crop_imgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop patches from the source image along the scan lines.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> &#8211; Source image.</li>
+<li><strong>patch_size</strong> &#8211; The edge length of cropped patches.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of cropped patches.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.feature_select_switcher">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">feature_select_switcher</code><span class="sig-paren">(</span><em>feature_keyword</em>, <em>image_dir=None</em>, <em>output_dir='./'</em>, <em>identifier=None</em>, <em>extension='jpg'</em>, <em>max_threads=1</em>, <em>load_GMM_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#feature_select_switcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.feature_select_switcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper to easily determine which feature to be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>feature_keyword</strong> &#8211; <p>Keyword for feature data which will be returned finally:</p>
+<ul>
+<li>If a path to a file of features is given, this will return loaded numpy array.</li>
+<li><dl class="first docutils">
+<dt>If a type of feature and image_dir are given, this will return calculated features with the type. </dt>
+<dd><ul class="first last">
+<li>Now &#8216;gabor&#8217; and &#8216;fisher&#8217; are available as feature types.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>If an unrecognized string or None is given, this will return None.</li>
+</ul>
+</li>
+<li><strong>image_dir</strong> &#8211; Directory including images for calculating features. This will be ignored when feature file is already existing. See fisher and gabor module for more detail.</li>
+<li><strong>output_dir</strong> &#8211; Output directory for calculated feature file. This will be also ignored when feature file is already existing.</li>
+<li><strong>identifier</strong> &#8211; Identifier of file name of features. This will be used as like &#8220;&lt;identifier&gt;_&lt;feature_keyword&gt;_features.npy&#8221;</li>
+<li><strong>extension</strong> &#8211; Suffix of images to be loaded.</li>
+<li><strong>max_threads</strong> &#8211; Max threads for multiprocessing. Default of &#8216;1&#8217; means the multiprocessing will be disable.</li>
+<li><strong>load_GMM_dir</strong> &#8211; (ignored except fisher feature)Directory of GMM paramterers which were calcluated at training time in advance. In general this flag should work when evaluation.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Calculated or loaded features as numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.get_crop_locs">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">get_crop_locs</code><span class="sig-paren">(</span><em>shape</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#get_crop_locs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.get_crop_locs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get locations where patches are cropped in a source image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> &#8211; Shape of source image you suppose.</li>
+<li><strong>patch_size</strong> &#8211; The edge length of cropped patches.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Cropping location as list of ((tl_y tl_x), (br_y, br_x)).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.get_crop_masks">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">get_crop_masks</code><span class="sig-paren">(</span><em>shape</em>, <em>patch_size=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#get_crop_masks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.get_crop_masks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get masks for cropping regions in a source image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> &#8211; Shape of source image you suppose.</li>
+<li><strong>patch_size</strong> &#8211; The edge length of cropped patches.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">List of the masks of numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.load_images_from_dirs">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">load_images_from_dirs</code><span class="sig-paren">(</span><em>basedir</em>, <em>classnames</em>, <em>image_shape=(299</em>, <em>299)</em>, <em>extension='*'</em>, <em>max_smps=-1</em>, <em>max_threads=1</em>, <em>vervosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#load_images_from_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.load_images_from_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load images from sub-directories and pre-resize them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>basedir</strong> &#8211; Base directory containing sub-directories including images to be loaded.</li>
+<li><strong>classnames</strong> &#8211; List of the sub-directories&#8217; naems arranged in order of class labels.</li>
+<li><strong>image_shape</strong> &#8211; Shape of loaded images for resizing.</li>
+<li><strong>extension</strong> &#8211; Suffix of images to be loaded.</li>
+<li><strong>max_smps</strong> &#8211; Limitation of images to be loaded. Default of &#8216;-1&#8217; means the entire images will be loaded.</li>
+<li><strong>max_threads</strong> &#8211; Max threads for multiprocessing. Default of &#8216;1&#8217; means the multiprocessing will be disable.</li>
+<li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as list of numpy array in shape of (samples_num, image_shape[0], image_shape[1]).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.load_images_in_dir">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">load_images_in_dir</code><span class="sig-paren">(</span><em>dirname</em>, <em>image_shape=(299</em>, <em>299)</em>, <em>extension='*'</em>, <em>max_smps=-1</em>, <em>max_threads=1</em>, <em>vervosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#load_images_in_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.load_images_in_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load images from a single directory and pre-resize them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dirname</strong> &#8211; Directory including images to be loaded.</li>
+<li><strong>image_shape</strong> &#8211; Shape of loaded images for resizing.</li>
+<li><strong>extension</strong> &#8211; Suffix of images to be loaded.</li>
+<li><strong>max_smps</strong> &#8211; Limitation of images to be loaded. Default of &#8216;-1&#8217; means the entire images will be loaded.</li>
+<li><strong>max_threads</strong> &#8211; Max threads for multiprocessing. Default of &#8216;1&#8217; means the multiprocessing will be disable.</li>
+<li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as numpy array in shape of (classes_num, samples_num, image_shape[0], image_shape[1]).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.mp_func">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">mp_func</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#mp_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.mp_func" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.preprocess_on_images">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">preprocess_on_images</code><span class="sig-paren">(</span><em>images</em>, <em>type='inception'</em>, <em>vervosity=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#preprocess_on_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.preprocess_on_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess on the images by several types of method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>images</strong> &#8211; Target images. Numpy array of multiple images like (sample_num, height, width) is also allowed to be this input.</li>
+<li><strong>type</strong> &#8211; <p>Preprocessing type. You can choose from &#8216;inception&#8217;, &#8216;vgg&#8217;, and &#8216;disable&#8217;:</p>
+<ul>
+<li>inception: Apply GoogLeNet based method that makes values supressed within (-1.0, 1.0).</li>
+<li>vgg: Apply VGG based method that subtracts specific values from image values in RBG respectively. This has been implemented on Keras.</li>
+<li>disable: Not apply any methods of preprocessing.</li>
+</ul>
+</li>
+<li><strong>vervosity</strong> (<em>bool</em>) &#8211; Vervosity on displaying status.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Loaded and resized images as numpy array in shape of (samples_num, image_shape[0], image_shape[1]).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sgw_utils.io.image.resize_and_transpose">
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">resize_and_transpose</code><span class="sig-paren">(</span><em>img_fn</em>, <em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#resize_and_transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.resize_and_transpose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-sgw_utils.io">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sgw_utils.io" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sgw_utils.model.html" class="btn btn-neutral float-right" title="sgw_utils.model package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sgw_utils.features.html" class="btn btn-neutral" title="sgw_utils.features package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Author.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
