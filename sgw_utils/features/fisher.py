@@ -91,7 +91,7 @@ def fisher_vector(samples, means, covs, w):
 	fv = normalize(fv)
 	return fv
 
-def generate_gmm(input_folder, working_folder, N=3, dense_steps=30, extension="jpg"):
+def generate_gmm(input_folder, working_folder, N=5, dense_steps=30, extension="jpg"):
 	"""Fit a GMM(Gaussian mixture model) from dense SIFT descriptors and save its parameters. 
 
 	:param input_folder: Path to folder containing images. 
@@ -114,6 +114,18 @@ def generate_gmm(input_folder, working_folder, N=3, dense_steps=30, extension="j
 	np.save(working_folder + "/means.gmm", means)
 	np.save(working_folder + "/covs.gmm", covs)
 	np.save(working_folder + "/weights.gmm", weights)
+	return means, covs, weights
+
+def load_gmm(working_folder):
+	"""Load GMM parameters which were calculated at training time. 
+
+	:param working_folder: Path to folder including 'means.gmm', 'covs.gmm', and 'weights.gmm'. 
+	:return: GMM parameters which are means, covariances, and mixture weights. 
+	"""
+	print("Load GMM parameters from %s. " % working_folder)
+	means   = np.load(working_folder + "/means.gmm")
+	covs    = np.load(working_folder + "/covs.gmm")
+	weights = np.load(working_folder + "/weights.gmm")
 	return means, covs, weights
 
 def get_fisher_vectors_from_folder_original(folder, gmm):

@@ -198,7 +198,7 @@ def preprocess_on_images(images, type='inception', vervosity=1):
     return images
 
 def feature_select_switcher(feature_keyword, 
-    image_dir=None, output_dir="./", identifier=None, extension="jpg", max_threads=1):
+    image_dir=None, output_dir="./", identifier=None, extension="jpg", max_threads=1, load_trained_GMM=False):
     """Helper to easily determine which feature to be returned. 
     
     :param feature_keyword: Keyword for feature data which will be returned finally: 
@@ -213,6 +213,7 @@ def feature_select_switcher(feature_keyword,
     :param identifier: Identifier of file name of features. This will be used as like "<identifier>_<feature_keyword>_features.npy"
     :param extension: Suffix of images to be loaded. 
     :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
+    :param load_trained_GMM: Flag to load GMM paramterers which were calcluated at training time in advance. In general this flag is turned on when evaluation. 
     :return: Calculated or loaded features as numpy array. 
     """
 
@@ -237,8 +238,9 @@ def feature_select_switcher(feature_keyword,
                 if not os.path.exists(feature_filename) else gabor.load_gabor_features(feature_filename)
         elif feature_keyword == 'fisher':
             print "[I]Feature type: Fisher"
-            return_features = fisher.fisher_features(image_dir, output_dir, 
-                fisher.generate_gmm(image_dir, output_dir), 
+            gmm = fisher.generate_gmm(image_dir, output_dir) \
+                if not load_trained_GMM else fisher.load_gmm(output_dir)
+            return_features = fisher.fisher_features(image_dir, output_dir, gmm, 
                 extension=extension, file=feature_filename) \
                 if not os.path.exists(feature_filename) else fisher.load_fisher_features(feature_filename)
 
