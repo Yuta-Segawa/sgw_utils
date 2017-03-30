@@ -293,7 +293,9 @@
 <div class="viewcode-block" id="fisher_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.fisher_features">[docs]</a><span class="k">def</span> <span class="nf">fisher_features</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="n">working_folder</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;fisher_features.npy&quot;</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;Calcluate fisher features on images with GMM parameters estimated in advance. </span>
 
-<span class="sd">	:param input_folder: Path to folder containing images. </span>
+<span class="sd">	This is usually called by feature_select_switcher. </span>
+
+<span class="sd">	:param input_folder: Path to folder containing sud directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.</span>
 <span class="sd">	:param working_folder: Path to folder where the model parameters are saved in. </span>
 <span class="sd">	:param gmm: GMM model as a parameter tuple of (means, covariances, mixture weights). </span>
 <span class="sd">	:param dense_steps: Dense steps of keypoints to be used for SIFT feature extraction. </span>
@@ -301,7 +303,10 @@
 <span class="sd">	:param file: Filename of features. This is used when saving. </span>
 <span class="sd">	:return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). </span>
 <span class="sd">	&quot;&quot;&quot;</span>
-	<span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span>
+	<span class="n">folders</span> <span class="o">=</span> <span class="p">[</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">d</span> <span class="p">]</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">folders</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_folder</span><span class="p">]</span>
+
 	<span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">get_fisher_vectors_from_folder</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> <span class="n">dense_steps</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">])</span>
 
 	<span class="k">if</span> <span class="n">working_folder</span><span class="p">:</span>
@@ -311,7 +316,7 @@
 
 		<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
 
-	<span class="k">return</span> <span class="n">features</span></div>
+	<span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">features</span><span class="p">)</span></div>
 	
 <div class="viewcode-block" id="load_fisher_features"><a class="viewcode-back" href="../../../sgw_utils.features.html#sgw_utils.features.fisher.load_fisher_features">[docs]</a><span class="k">def</span> <span class="nf">load_fisher_features</span><span class="p">(</span><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;fisher_features.npy&quot;</span><span class="p">):</span>
 	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Read file &#39;</span><span class="si">%s</span><span class="s2">&#39; in the workspace to get fisher features.&quot;</span> <span class="o">%</span> <span class="n">file</span><span class="p">)</span>

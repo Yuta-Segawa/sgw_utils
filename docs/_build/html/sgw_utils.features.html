@@ -212,12 +212,13 @@
 <dt id="sgw_utils.features.fisher.fisher_features">
 <code class="descclassname">sgw_utils.features.fisher.</code><code class="descname">fisher_features</code><span class="sig-paren">(</span><em>input_folder</em>, <em>working_folder</em>, <em>gmm</em>, <em>dense_steps=30</em>, <em>extension='jpg'</em>, <em>file='fisher_features.npy'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/fisher.html#fisher_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.fisher.fisher_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcluate fisher features on images with GMM parameters estimated in advance.</p>
+<p>This is usually called by feature_select_switcher.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>input_folder</strong> &#8211; Path to folder containing images.</li>
+<li><strong>input_folder</strong> &#8211; Path to folder containing sud directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.</li>
 <li><strong>working_folder</strong> &#8211; Path to folder where the model parameters are saved in.</li>
 <li><strong>gmm</strong> &#8211; GMM model as a parameter tuple of (means, covariances, mixture weights).</li>
 <li><strong>dense_steps</strong> &#8211; Dense steps of keypoints to be used for SIFT feature extraction.</li>
@@ -365,12 +366,13 @@
 <dt id="sgw_utils.features.gabor.gabor_features">
 <code class="descclassname">sgw_utils.features.gabor.</code><code class="descname">gabor_features</code><span class="sig-paren">(</span><em>input_folder</em>, <em>working_folder</em>, <em>extension='jpg'</em>, <em>file='gabor_features.npy'</em>, <em>max_threads=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/features/gabor.html#gabor_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.features.gabor.gabor_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcluate Gabor features on images.</p>
+<p>This is usually called by feature_select_switcher.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>input_folder</strong> &#8211; Path to folder over sub directories containing images.</li>
+<li><strong>input_folder</strong> &#8211; Path to folder over sub directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.</li>
 <li><strong>working_folder</strong> &#8211; Path to folder where the model parameters are saved in.</li>
 <li><strong>extension</strong> &#8211; Suffix of images.</li>
 <li><strong>file</strong> &#8211; Filename of features. This is used when saving.</li>
