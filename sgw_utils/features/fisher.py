@@ -136,7 +136,7 @@ def fisher_features(input_folder, working_folder, gmm, dense_steps = 30, extensi
 	:return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). 
 	"""
 	folders = sorted(glob.glob(input_folder + "/*"))
-	features = np.float32([get_fisher_vectors_from_folder(f, gmm, dense_steps, extension=extension) for f in folders])
+	features = np.array([get_fisher_vectors_from_folder(f, gmm, dense_steps, extension=extension) for f in folders])
 
 	if working_folder:
 		fmt = 'Images in {} labeled as {}. '

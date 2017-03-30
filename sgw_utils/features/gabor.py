@@ -203,11 +203,11 @@ def gabor_features_in_patchscale(input_floder, working_folder,
     folders = sorted(glob.glob(input_floder + "/*"))
 
     print "Found %d classes. " % len(folders)
-    features = [get_gabor_features_from_folder_in_patchscale(f, extension=extension, patch_size=patch_size, max_threads=max_threads) 
-            for f in folders]
+    features = np.array([get_gabor_features_from_folder_in_patchscale(f, extension=extension, patch_size=patch_size, max_threads=max_threads) 
+            for f in folders])
 
     output_feature_filename = os.path.join(working_folder, file)
-    np.save(output_feature_filename, features.values())
+    np.save(output_feature_filename, features)
     print "Saved calculated features as %s. " % output_feature_filename
 
     return features
@@ -237,8 +237,8 @@ def gabor_features(input_folder, working_folder, extension="jpg", file="gabor_fe
         print fmt.format(folder, label)
 
     print "Found %d class. " % len(folders)
-    features = [get_gabor_features_from_folder(f, 
-                    extension=extension, max_threads=max_threads) for f in folders]
+    features = np.array([get_gabor_features_from_folder(f, 
+                    extension=extension, max_threads=max_threads) for f in folders])
 
     output_feature_filename = os.path.join(working_folder, file)
     np.save(output_feature_filename, features)
