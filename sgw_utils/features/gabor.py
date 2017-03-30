@@ -121,8 +121,8 @@ def get_gabor_features_from_folder(folder, extension="jpg", max_threads=1, batch
 
     files = glob.glob(folder + "/*.%s" % extension)
     print 'Calculate Gabor features for %d images. ' % len(files)
-    images = [cv2.imread(fn, 0) for fn in files]
-    image_batches = np.expand_dims(images, axis=0)
+    images = np.uint8([cv2.imread(fn, 0) for fn in files])
+    # image_batches = np.expand_dims(images, axis=0)
     split_num = len(files) / batch_size
     if split_num > 0:
         image_batches = np.array_split(images, split_num)
@@ -238,7 +238,7 @@ def gabor_features(input_folder, working_folder, extension="jpg", file="gabor_fe
 
     print "Found %d class. " % len(folders)
     features = [get_gabor_features_from_folder(f, 
-                    extension=extension, max_threads=max_threads) for i, f in enumerate(folders)]
+                    extension=extension, max_threads=max_threads) for f in folders]
 
     output_feature_filename = os.path.join(working_folder, file)
     np.save(output_feature_filename, features)
