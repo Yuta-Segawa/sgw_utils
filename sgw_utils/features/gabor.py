@@ -125,9 +125,7 @@ def get_gabor_features_from_folder(folder, extension="jpg", max_threads=1, batch
     image_batches = np.expand_dims(images, axis=0)
     split_num = len(files) / batch_size
     if split_num > 0:
-        print images
-        print np.uint8(images), split_num
-        image_batches = np.array_split(np.uint8(images), split_num)
+        image_batches = np.array_split(images, split_num)
         print 'Splitted %d batches respectively including %d images. ' % (len(image_batches), len(image_batches[0]))
 
     # gabor_maps = get_gabor_map(images[0].shape[:2], range(0, 180, 45))
