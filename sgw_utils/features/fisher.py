@@ -111,9 +111,9 @@ def generate_gmm(input_folder, working_folder, N=5, dense_steps=30, extension="j
 	covs = np.float32([m for k,m in zip(range(0, len(weights)), covs) if weights[k] > th])
 	weights = np.float32([m for k,m in zip(range(0, len(weights)), weights) if weights[k] > th])
 
-	np.save(working_folder + "/means.gmm", means)
-	np.save(working_folder + "/covs.gmm", covs)
-	np.save(working_folder + "/weights.gmm", weights)
+	np.save(working_folder + "/means.gmm.npy", means)
+	np.save(working_folder + "/covs.gmm.npy", covs)
+	np.save(working_folder + "/weights.gmm.npy", weights)
 	return means, covs, weights
 
 def load_gmm(working_folder):
@@ -123,9 +123,9 @@ def load_gmm(working_folder):
 	:return: GMM parameters which are means, covariances, and mixture weights. 
 	"""
 	print("Load GMM parameters from %s. " % working_folder)
-	means   = np.load(working_folder + "/means.gmm")
-	covs    = np.load(working_folder + "/covs.gmm")
-	weights = np.load(working_folder + "/weights.gmm")
+	means   = np.load(working_folder + "/means.gmm.npy")
+	covs    = np.load(working_folder + "/covs.gmm.npy")
+	weights = np.load(working_folder + "/weights.gmm.npy")
 	return means, covs, weights
 
 def get_fisher_vectors_from_folder_original(folder, gmm):
