@@ -33,7 +33,7 @@ def make_set_xy(loaded_npy, label_type='sklearn'):
 
     :return: Tuple of (<vertically stacked features>, <corresponding labels>). 
     """
-    labels = np.int32([ np.ones(len(class_f)) * idx for idx, class_f in enumerate(loaded_npy) ])
+    labels = [ np.ones(len(class_f)).astype(int) * idx for idx, class_f in enumerate(loaded_npy) ]
 
     x = np.vstack(loaded_npy)
     y = np.hstack(labels)
