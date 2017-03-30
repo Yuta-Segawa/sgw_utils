@@ -208,7 +208,7 @@ def feature_select_switcher(feature_keyword,
             - Now 'gabor' and 'fisher' are available as feature types. 
         - If an unrecognized string or None is given, this will return None. 
     
-    :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. 
+    :param image_dir: Directory including images for calculating features. This will be ignored when feature file is already existing. See fisher and gabor module for more detail. 
     :param output_dir: Output directory for calculated feature file. This will be also ignored when feature file is already existing. 
     :param identifier: Identifier of file name of features. This will be used as like "<identifier>_<feature_keyword>_features.npy"
     :param extension: Suffix of images to be loaded. 

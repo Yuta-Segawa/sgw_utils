@@ -222,7 +222,9 @@ def load_gabor_features(file = "gabor_features.npy"):
 def gabor_features(input_folder, working_folder, extension="jpg", file="gabor_features.npy", max_threads=1):
     """Calcluate Gabor features on images. 
 
-    :param input_folder: Path to folder over sub directories containing images. 
+    This is usually called by feature_select_switcher. 
+
+    :param input_folder: Path to folder over sub directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.
     :param working_folder: Path to folder where the model parameters are saved in. 
     :param extension: Suffix of images. 
     :param file: Filename of features. This is used when saving. 

@@ -139,7 +139,9 @@ def get_fisher_vectors_from_folder(folder, gmm, dense_steps = 30, extension="jpg
 def fisher_features(input_folder, working_folder, gmm, dense_steps = 30, extension="jpg", file="fisher_features.npy"):
 	"""Calcluate fisher features on images with GMM parameters estimated in advance. 
 
-	:param input_folder: Path to folder containing images. 
+	This is usually called by feature_select_switcher. 
+
+	:param input_folder: Path to folder containing sud directories containing images. If this folder has no directories but images, the images are directly loaded with label 0.
 	:param working_folder: Path to folder where the model parameters are saved in. 
 	:param gmm: GMM model as a parameter tuple of (means, covariances, mixture weights). 
 	:param dense_steps: Dense steps of keypoints to be used for SIFT feature extraction. 
