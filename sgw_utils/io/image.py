@@ -213,7 +213,7 @@ def feature_select_switcher(feature_keyword,
     :param identifier: Identifier of file name of features. This will be used as like "<identifier>_<feature_keyword>_features.npy"
     :param extension: Suffix of images to be loaded. 
     :param max_threads: Max threads for multiprocessing. Default of '1' means the multiprocessing will be disable. 
-    :param load_trained_GMM: Flag to load GMM paramterers which were calcluated at training time in advance. In general this flag is turned on when evaluation. 
+    :param load_trained_GMM: (ignored except fisher feature)Flag to load GMM paramterers which were calcluated at training time in advance. In general this flag is turned on when evaluation. 
     :return: Calculated or loaded features as numpy array. 
     """
 
