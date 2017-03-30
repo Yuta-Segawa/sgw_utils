@@ -160,7 +160,7 @@ def fisher_features(input_folder, working_folder, gmm, dense_steps = 30, extensi
 
 		np.save(os.path.join(working_folder, file), features)
 
-	return features
+	return np.squeeze(features)
 	
 def load_fisher_features(file = "fisher_features.npy"):
 	print("Read file '%s' in the workspace to get fisher features." % file)

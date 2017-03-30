@@ -200,7 +200,9 @@ def gabor_features_in_patchscale(input_floder, working_folder,
 
 
     # Get subdirectories
-    folders = sorted(glob.glob(input_floder + "/*"))
+    folders = [ d for d in sorted(glob.glob(input_folder + "/*")) if not '.%s' % extension in d ]
+    if len(folders) == 0:
+        folders = [input_folder]
 
     print "Found %d classes. " % len(folders)
     features = np.array([get_gabor_features_from_folder_in_patchscale(f, extension=extension, patch_size=patch_size, max_threads=max_threads) 
@@ -210,7 +212,7 @@ def gabor_features_in_patchscale(input_floder, working_folder,
     np.save(output_feature_filename, features)
     print "Saved calculated features as %s. " % output_feature_filename
 
-    return features
+    return np.squeeze(features)
 
 def load_gabor_features(file = "gabor_features.npy"):
 	print("Read file '%s' in the workspace to get gabor features." % file)
@@ -229,8 +231,9 @@ def gabor_features(input_folder, working_folder, extension="jpg", file="gabor_fe
     """
 
     # Get subdirectories
-    folders = sorted(glob.glob(input_folder + "/*"))
-    print folders
+    folders = [ d for d in sorted(glob.glob(input_folder + "/*")) if not '.%s' % extension in d ]
+    if len(folders) == 0:
+        folders = [input_folder]
 
     fmt = 'Images in {} will be labeled as {}. '
     for label, folder in enumerate(folders):
@@ -244,7 +247,7 @@ def gabor_features(input_folder, working_folder, extension="jpg", file="gabor_fe
     np.save(output_feature_filename, features)
     print "Saved calculated features as %s. " % output_feature_filename
 
-    return features
+    return np.squeeze(features)
 
 
 if __name__ == "__main__":

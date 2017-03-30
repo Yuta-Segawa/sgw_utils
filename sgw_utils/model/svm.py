@@ -9,7 +9,7 @@ class SVM():
     """
 
 
-    def __init__(self, kernel_type="linear", tol=0.001, max_iter=10000, grid_search=True):
+    def __init__(self, kernel_type="linear", tol=0.00001, max_iter=10000, grid_search=True):
 
         self.kernel_type = kernel_type
         self.tol = tol
@@ -23,7 +23,7 @@ class SVM():
             self.clf = GridSearchCV( svm.SVC(kernel=kernel_type, tol=tol, max_iter = max_iter, probability=True), 
                 self.param_grid, n_jobs=-1 )
         else:
-            self.clf = svm.SVC(kernel=kernel_type, tol=tol, max_iter = max_iter)
+            self.clf = svm.SVC(kernel=kernel_type, tol=tol, max_iter = max_iter, probability=True)
 
     def __str__(self):
         return vars(self)
