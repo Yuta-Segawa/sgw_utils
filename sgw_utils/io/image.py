@@ -238,8 +238,8 @@ def feature_select_switcher(feature_keyword,
         elif feature_keyword == 'fisher':
             print "[I]Feature type: Fisher"
             return_features = fisher.fisher_features(image_dir, output_dir, 
-                fisher.generate_gmm(image_dir, output_dir, N=5), 
-                dense_steps=30, extension=extension, file=feature_filename) \
+                fisher.generate_gmm(image_dir, output_dir), 
+                extension=extension, file=feature_filename) \
                 if not os.path.exists(feature_filename) else fisher.load_fisher_features(feature_filename)
 
     # 3) exception
