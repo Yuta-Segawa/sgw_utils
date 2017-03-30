@@ -386,7 +386,7 @@ by making a comment-out for exceptions on the input dimensionality.</p>
 
 <dl class="function">
 <dt id="sgw_utils.io.image.feature_select_switcher">
-<code class="descclassname">sgw_utils.io.image.</code><code class="descname">feature_select_switcher</code><span class="sig-paren">(</span><em>feature_keyword</em>, <em>image_dir=None</em>, <em>output_dir='./'</em>, <em>identifier=None</em>, <em>extension='jpg'</em>, <em>max_threads=1</em>, <em>load_trained_GMM=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#feature_select_switcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.feature_select_switcher" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sgw_utils.io.image.</code><code class="descname">feature_select_switcher</code><span class="sig-paren">(</span><em>feature_keyword</em>, <em>image_dir=None</em>, <em>output_dir='./'</em>, <em>identifier=None</em>, <em>extension='jpg'</em>, <em>max_threads=1</em>, <em>load_GMM_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sgw_utils/io/image.html#feature_select_switcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sgw_utils.io.image.feature_select_switcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper to easily determine which feature to be returned.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -412,7 +412,7 @@ by making a comment-out for exceptions on the input dimensionality.</p>
 <li><strong>identifier</strong> &#8211; Identifier of file name of features. This will be used as like &#8220;&lt;identifier&gt;_&lt;feature_keyword&gt;_features.npy&#8221;</li>
 <li><strong>extension</strong> &#8211; Suffix of images to be loaded.</li>
 <li><strong>max_threads</strong> &#8211; Max threads for multiprocessing. Default of &#8216;1&#8217; means the multiprocessing will be disable.</li>
-<li><strong>load_trained_GMM</strong> &#8211; (ignored except fisher feature)Flag to load GMM paramterers which were calcluated at training time in advance. In general this flag is turned on when evaluation.</li>
+<li><strong>load_GMM_dir</strong> &#8211; (ignored except fisher feature)Directory of GMM paramterers which were calcluated at training time in advance. In general this flag should work when evaluation.</li>
 </ul>
 </td>
 </tr>

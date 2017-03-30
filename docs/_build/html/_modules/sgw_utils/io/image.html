@@ -352,7 +352,7 @@
     <span class="k">return</span> <span class="n">images</span></div>
 
 <div class="viewcode-block" id="feature_select_switcher"><a class="viewcode-back" href="../../../sgw_utils.io.html#sgw_utils.io.image.feature_select_switcher">[docs]</a><span class="k">def</span> <span class="nf">feature_select_switcher</span><span class="p">(</span><span class="n">feature_keyword</span><span class="p">,</span> 
-    <span class="n">image_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">load_trained_GMM</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">image_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">load_GMM_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Helper to easily determine which feature to be returned. </span>
 <span class="sd">    </span>
 <span class="sd">    :param feature_keyword: Keyword for feature data which will be returned finally: </span>
@@ -367,7 +367,7 @@
 <span class="sd">    :param identifier: Identifier of file name of features. This will be used as like &quot;&lt;identifier&gt;_&lt;feature_keyword&gt;_features.npy&quot;</span>
 <span class="sd">    :param extension: Suffix of images to be loaded. </span>
 <span class="sd">    :param max_threads: Max threads for multiprocessing. Default of &#39;1&#39; means the multiprocessing will be disable. </span>
-<span class="sd">    :param load_trained_GMM: (ignored except fisher feature)Flag to load GMM paramterers which were calcluated at training time in advance. In general this flag is turned on when evaluation. </span>
+<span class="sd">    :param load_GMM_dir: (ignored except fisher feature)Directory of GMM paramterers which were calcluated at training time in advance. In general this flag should work when evaluation. </span>
 <span class="sd">    :return: Calculated or loaded features as numpy array. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -393,7 +393,7 @@
         <span class="k">elif</span> <span class="n">feature_keyword</span> <span class="o">==</span> <span class="s1">&#39;fisher&#39;</span><span class="p">:</span>
             <span class="nb">print</span> <span class="s2">&quot;[I]Feature type: Fisher&quot;</span>
             <span class="n">gmm</span> <span class="o">=</span> <span class="n">fisher</span><span class="o">.</span><span class="n">generate_gmm</span><span class="p">(</span><span class="n">image_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span> \
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">load_trained_GMM</span> <span class="k">else</span> <span class="n">fisher</span><span class="o">.</span><span class="n">load_gmm</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">load_GMM_dir</span> <span class="k">else</span> <span class="n">fisher</span><span class="o">.</span><span class="n">load_gmm</span><span class="p">(</span><span class="n">load_GMM_dir</span><span class="p">)</span>
             <span class="n">return_features</span> <span class="o">=</span> <span class="n">fisher</span><span class="o">.</span><span class="n">fisher_features</span><span class="p">(</span><span class="n">image_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">gmm</span><span class="p">,</span> 
                 <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">feature_filename</span><span class="p">)</span> \
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">feature_filename</span><span class="p">)</span> <span class="k">else</span> <span class="n">fisher</span><span class="o">.</span><span class="n">load_fisher_features</span><span class="p">(</span><span class="n">feature_filename</span><span class="p">)</span>
