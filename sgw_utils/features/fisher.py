@@ -91,7 +91,7 @@ def fisher_vector(samples, means, covs, w):
 	fv = normalize(fv)
 	return fv
 
-def generate_gmm(input_folder, working_folder, N=4, dense_steps=30, extension="jpg"):
+def generate_gmm(input_folder, working_folder, N=3, dense_steps=30, extension="jpg"):
 	"""Fit a GMM(Gaussian mixture model) from dense SIFT descriptors and save its parameters. 
 
 	:param input_folder: Path to folder containing images. 
