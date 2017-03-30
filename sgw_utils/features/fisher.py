@@ -147,7 +147,10 @@ def fisher_features(input_folder, working_folder, gmm, dense_steps = 30, extensi
 	:param file: Filename of features. This is used when saving. 
 	:return: Calculated fisher features as numpy array in shape of (classes_num, smaples_num, dimensionality). 
 	"""
-	folders = sorted(glob.glob(input_folder + "/*"))
+	folders = [ d for d in sorted(glob.glob(input_folder + "/*")) if not '.%s' % extension in d ]
+	if len(folders) == 0:
+		folders = [input_folder]
+
 	features = np.array([get_fisher_vectors_from_folder(f, gmm, dense_steps, extension=extension) for f in folders])
 
 	if working_folder:
