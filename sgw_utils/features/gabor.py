@@ -119,7 +119,7 @@ def gabor_descriptor(args):
 
 def get_gabor_features_from_folder(folder, extension="jpg", max_threads=1, batch_size=100):
 
-    files = glob.glob(folder + "/*.%s" % extension)
+    files = sorted(glob.glob(folder + "/*.%s" % extension))
     print 'Calculate Gabor features for %d images. ' % len(files)
     images = [cv2.imread(fn, 0) for fn in files]
     # image_batches = np.expand_dims(images, axis=0)
@@ -153,7 +153,7 @@ def get_gabor_features_from_folder(folder, extension="jpg", max_threads=1, batch
 
 
 def get_gabor_features_from_folder_in_patchscale(folder, patch_size=32, extension="jpg", max_threads=1, batch_size=100):
-    files = glob.glob(folder + "/*.%s" % extension)
+    files = sorted(glob.glob(folder + "/*.%s" % extension))
     print 'Calculate Gabor features for %d images. ' % len(files)
 
     gabor_kernels = [ gabor_kernel(frequency=0.5, 

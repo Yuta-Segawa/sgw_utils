@@ -40,7 +40,7 @@ def folder_descriptors_original(folder):
 my function (segawa)
 """
 def folder_descriptors(folder, dense_steps=30, extension="jpg"):
-	files = glob.glob(folder + "/*.%s" % extension)
+	files = sorted(glob.glob(folder + "/*.%s" % extension))
 	print("Calculating descriptors. Number of images is %d. " % len(files))
 	return np.concatenate([image_descriptors(file, dense_steps) for file in files])
 
@@ -102,7 +102,7 @@ def generate_gmm(input_folder, working_folder, N=5, dense_steps=30, extension="j
 	:return: GMM parameters which are means, covariances, and mixture weights. 
 	"""
 
-	words = np.concatenate([folder_descriptors(folder, dense_steps, extension) for folder in glob.glob(input_folder + '/*')])
+	words = np.concatenate([folder_descriptors(folder, dense_steps, extension) for folder in sorted(glob.glob(input_folder + '/*'))])
 	print("Training GMM of size", N)
 	means, covs, weights = dictionary(words, N)
 	#Throw away gaussians with weights that are too small:
@@ -121,7 +121,7 @@ def get_fisher_vectors_from_folder_original(folder, gmm):
 	return np.float32([fisher_vector(image_descriptors(file), *gmm) for file in files])
 
 def get_fisher_vectors_from_folder(folder, gmm, dense_steps = 30, extension="jpg"):
-	files = glob.glob(folder + "/*.%s"%extension)
+	files = sorted(glob.glob(folder + "/*.%s"%extension))
 	return np.float32([fisher_vector(image_descriptors(file, dense_steps), *gmm) for file in files])
 
 def fisher_features(input_folder, working_folder, gmm, dense_steps = 30, extension="jpg", file="fisher_features.npy"):
