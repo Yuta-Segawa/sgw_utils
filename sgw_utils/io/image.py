@@ -226,7 +226,8 @@ def feature_select_switcher(feature_keyword,
     # 2) obtain features by calculation or loading from an existing file
     available_feature_types = ['gabor', 'fisher']
     if feature_keyword in available_feature_types:
-        feature_filename = os.path.join(output_dir, "_".join([identifier, feature_keyword, "features.npy"]))
+        name_elms = [ elm for elm in [identifier, feature_keyword, "features.npy"] if elm is not None]
+        feature_filename = os.path.join(output_dir, "_".join())
     
         # calculate features if the option has a valid feature type
         if feature_keyword == "gabor":
